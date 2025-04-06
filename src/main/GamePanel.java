@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
-    //screen settings
+    //Screen settings
     final int originalTileSize = 16; //16*16 tile
     final int scale = 3;
     public final int tileSize = originalTileSize * scale;
@@ -15,16 +15,24 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxScreenRow = 15;
     public final int screenWidth = tileSize * maxScreenCol; //960
     public final int screenHeight = tileSize * maxScreenRow; //720
+
     Thread gameThread;
     KeyHandler keyH = new KeyHandler();
-    Player player = new Player(this, keyH);
-
     int FPS = 60;
-    TileManager tm = new TileManager(this);
+    public CheckCollision checkCollision = new CheckCollision(this);
+    public TileManager tm = new TileManager(this);
+    public Player player = new Player(this, keyH);
+
+    //World settings
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
+    public final int worldWidth = tileSize * maxWorldCol;
+    public final int worldHeight = tileSize * maxWorldRow;
+
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.CYAN);
+        this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
