@@ -18,6 +18,7 @@ public class Settings {
         window.pack();
 
         gp.requestFocusInWindow();
+        gp.settingsForGame();
         gp.startGameTime();
     }
 }

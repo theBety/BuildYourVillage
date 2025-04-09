@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -22,6 +23,8 @@ public class GamePanel extends JPanel implements Runnable {
     public CheckCollision checkCollision = new CheckCollision(this);
     public TileManager tm = new TileManager(this);
     public Player player = new Player(this, keyH);
+    public PlacingSetter plSetter = new PlacingSetter(this);
+    public SuperObject[] objects = new SuperObject[10];
 
     //World settings
     public final int maxWorldCol = 50;
@@ -36,6 +39,12 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+    }
+
+    public void settingsForGame() {
+        //setupGame in video
+
+        plSetter.setObject();
     }
 
     public void startGameTime() {
@@ -72,8 +81,15 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        tm.draw(g2);
-        player.draw(g2);
+        tm.draw(g2); //draw tile
+        //draw object
+        for (SuperObject object : objects) {
+            if (object != null) {
+                object.drawObject(g2, this);
+            }
+        }
+        player.draw(g2); //draw player
+
         g2.dispose();
 
     }
