@@ -12,5 +12,6 @@ public class ObjChest extends SuperObject {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        collisionObject = true;
     }
 }

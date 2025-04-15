@@ -15,6 +15,8 @@ public class Player extends Entity {
 
     public final int screenX, screenY;
 
+    int keyCounter = 0;
+
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
@@ -36,6 +38,9 @@ public class Player extends Entity {
         direction = "down";
     }
 
+    /**
+     * Reads images of player - they're changing when he's moving
+     */
     public void getPlayerImage() {
         try {
             up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/back1.png")));
@@ -65,6 +70,10 @@ public class Player extends Entity {
             //Check tile collision
             collisionOn = false;
             gp.checkCollision.checkTile(this);
+
+            int objectIndex = gp.checkCollision.checkObject(this, true);
+            pickUpObject(objectIndex);
+
             if (!collisionOn) {
                 switch (direction) {
                     case "up":
@@ -89,6 +98,31 @@ public class Player extends Entity {
                     spriteNumber = 1;
                 }
                 spriteCounter = 0;
+            }
+        }
+    }
+
+    public void pickUpObject(int index){
+        if(index != -1){
+            String objectName = gp.objects[index].name;
+            switch (objectName) {
+                case "key":
+                    gp.objects[index] = null;
+                    keyCounter++;
+                    System.out.println("Keys: " + keyCounter);
+                    break;
+                case "trapdoor":
+                    if(keyCounter> 0){
+                        gp.objects[index] = null;
+                        keyCounter--;
+                    }
+                    break;
+                case "chest":
+                    break;
+                case "boots":
+                    speed+= 2;
+                    gp.objects[index] = null;
+                    break;
             }
         }
     }

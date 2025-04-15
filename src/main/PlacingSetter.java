@@ -1,9 +1,6 @@
 package main;
 
-import object.ObjChest;
-import object.ObjKey;
-import object.ObjTrapdoor;
-import object.SuperObject;
+import object.*;
 
 public class PlacingSetter {
     //AssetSetter in video
@@ -30,5 +27,9 @@ public class PlacingSetter {
         gp.objects[3] = new ObjKey();
         gp.objects[3].worldX = 20 * gp.tileSize;
         gp.objects[3].worldY = 13 * gp.tileSize;
+
+        gp.objects[4] = new ObjBoots();
+        gp.objects[4].worldX = 39 * gp.tileSize;
+        gp.objects[4].worldY = 18 * gp.tileSize;
     }
 }
