@@ -15,7 +15,7 @@ public class Player extends Entity {
 
     public final int screenX, screenY;
 
-    int keyCounter = 0;
+    public int keyCounter = 0;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -109,8 +109,8 @@ public class Player extends Entity {
                 case "key":
                     gp.objects[index] = null;
                     keyCounter++;
-                    System.out.println("Keys: " + keyCounter);
-                    break;
+                    gp.ui.printMessage("You picked up key");
+                     break;
                 case "trapdoor":
                     if(keyCounter> 0){
                         gp.objects[index] = null;
