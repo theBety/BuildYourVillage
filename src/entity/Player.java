@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -42,18 +43,26 @@ public class Player extends Entity {
      * Reads images of player - they're changing when he's moving
      */
     public void getPlayerImage() {
+        up1 = setUpImage("back1");
+        up2 = setUpImage("back2");
+        down1 = setUpImage("front1");
+        down2 = setUpImage("front2");
+        left1 = setUpImage("left1");
+        left2 = setUpImage("left2");
+        right1 = setUpImage("right1");
+        right2 = setUpImage("right2");
+    }
+
+    public BufferedImage setUpImage(String imageName) {
+        UtilityTool utilityTool = new UtilityTool();
+        BufferedImage scaledImage = null;
         try {
-            up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/back1.png")));
-            up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/back2.png")));
-            down1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/front1.png")));
-            down2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/front2.png")));
-            left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/left1.png")));
-            left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/left2.png")));
-            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/right1.png")));
-            right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/right2.png")));
+            scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/" + imageName + ".png")));
+            scaledImage = utilityTool.scaledImage(scaledImage, gp.tileSize, gp.tileSize);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return scaledImage;
     }
 
     public void update() {
@@ -102,25 +111,27 @@ public class Player extends Entity {
         }
     }
 
-    public void pickUpObject(int index){
-        if(index != -1){
+    public void pickUpObject(int index) {
+        if (index != -1) {
             String objectName = gp.objects[index].name;
             switch (objectName) {
                 case "key":
                     gp.objects[index] = null;
                     keyCounter++;
-                    gp.ui.printMessage("You picked up key");
-                     break;
+                    gp.ui.printMessage("You picked up key"); //prints message on a screen.
+                    break;
                 case "trapdoor":
-                    if(keyCounter> 0){
+                    if (keyCounter > 0) {
                         gp.objects[index] = null;
                         keyCounter--;
                     }
                     break;
                 case "chest":
+                    gp.ui.endGame = true;
+                    gp.stopMusic();
                     break;
                 case "boots":
-                    speed+= 2;
+                    speed += 2;
                     gp.objects[index] = null;
                     break;
             }
@@ -165,6 +176,6 @@ public class Player extends Entity {
                 break;
         }
 
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, null);
     }
 }

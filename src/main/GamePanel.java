@@ -69,6 +69,7 @@ public class GamePanel extends JPanel implements Runnable {
                 if (remainingTime < 0) {
                     remainingTime = 0;
                 }
+                //noinspection BusyWait
                 Thread.sleep((long) remainingTime / 1000000);
                 nextDrawTime += interval;
             } catch (InterruptedException e) {
@@ -84,6 +85,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
         tm.draw(g2); //draw tile
         //draw object
         for (SuperObject object : objects) {
@@ -93,6 +95,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
         player.draw(g2); //draw player
         ui.draw(g2);
+
         g2.dispose();
 
     }
