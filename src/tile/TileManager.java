@@ -26,7 +26,7 @@ public class TileManager {
     }
 
     /**
-     * "Initializes" all of the tiles
+     * "Initializes" all the tiles
      */
     public void getTileImage() {
         setUpImage(0, "grassWithGrass", false);
@@ -42,7 +42,7 @@ public class TileManager {
         setUpImage(10, "rightBottomClay", false);
         setUpImage(11, "rightTopWheatField", false);
         setUpImage(12, "wall", true);
-        setUpImage(13, "ewater4", true);
+        setUpImage(13, "eWater4", true);
         setUpImage(14, "leftClay", false);
         setUpImage(15, "leftDownWater", true);
         setUpImage(16, "leftTopStone", false);
@@ -121,10 +121,8 @@ public class TileManager {
         while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
 
             int tileNum = mapTileNum[worldCol][worldRow];
-
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;
-
             int screenX = worldX - gp.player.worldX + gp.player.screenX;
             int screenY = worldY - gp.player.worldY + gp.player.screenY;
 

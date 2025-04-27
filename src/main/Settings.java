@@ -4,19 +4,19 @@ import javax.swing.*;
 
 public class Settings {
 
-    JFrame window = new JFrame();
+    JFrame frame = new JFrame();
 
     public Settings() {
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
 
-        window.setTitle("Build your Village");
-        window.setVisible(true);
+        frame.setTitle("Build your Village");
+        frame.setVisible(true);
         GamePanel gp = new GamePanel();
-        window.add(gp);
-        window.pack();
+        frame.add(gp);
+        frame.pack();
 
-        window.setLocationRelativeTo(null);
+        frame.setLocationRelativeTo(null);
         gp.requestFocusInWindow();
         gp.settingsForGame();
         gp.startGameTime();

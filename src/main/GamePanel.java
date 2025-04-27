@@ -1,5 +1,6 @@
 package main;
 
+import entity.Entity;
 import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
@@ -12,13 +13,13 @@ public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16; //16*16 tile
     final int scale = 3;
     public final int tileSize = originalTileSize * scale;
-    public final int maxScreenCol = 20; //in video 16*12
+    public final int maxScreenCol = 20;
     public final int maxScreenRow = 15;
     public final int screenWidth = tileSize * maxScreenCol; //960
     public final int screenHeight = tileSize * maxScreenRow; //720
 
     Thread gameThread;
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     int FPS = 60;
 
     public CheckCollision checkCollision = new CheckCollision(this);
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyH);
     public PlacingSetter plSetter = new PlacingSetter(this);
     public SuperObject[] objects = new SuperObject[10];
+    public Entity npc[] = new Entity[3];
     SoundManager soundMusic = new SoundManager();
     SoundManager soundEffects = new SoundManager();
     public UI ui = new UI(this);
@@ -33,6 +35,8 @@ public class GamePanel extends JPanel implements Runnable {
     //World settings
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
+
+    public GameState gameState = GameState.PLAYING;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -43,11 +47,12 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void settingsForGame() {
-        //setupGame in video
 
-        plSetter.setObject();
-
+        //places objects on a map
+        //plSetter.setObject();
+        plSetter.setNpc();
         playSound(0);
+        gameState = GameState.PLAYING;
     }
 
     public void startGameTime() {
@@ -79,7 +84,17 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
+        if(gameState.equals(GameState.PLAYING)){
+            player.update();
+            for(Entity entity: npc){
+                if(entity!=null){
+                    entity.update();
+                }
+            }
+        }
+        if(gameState.equals(GameState.PAUSED)){
+
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -91,6 +106,11 @@ public class GamePanel extends JPanel implements Runnable {
         for (SuperObject object : objects) {
             if (object != null) {
                 object.drawObject(g2, this);
+            }
+        }
+        for (Entity entity : npc) {
+            if(entity != null){
+                entity.draw(g2);
             }
         }
         player.draw(g2); //draw player

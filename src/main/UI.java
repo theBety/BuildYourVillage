@@ -8,8 +8,8 @@ import java.text.DecimalFormat;
 
 public class UI {
     GamePanel gp;
+    Graphics2D g2;
     Font tNewRoman;
-    BufferedImage imgKey;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
@@ -17,15 +17,48 @@ public class UI {
 
     double playTime;
     DecimalFormat formatTime = new DecimalFormat("#0.0");
+
     public UI(GamePanel gp) {
         this.gp = gp;
         tNewRoman = new Font("TimesRoman", Font.PLAIN, 30);
-        ObjKey key = new ObjKey(gp);
-        imgKey = key.image;
     }
 
     public void draw(Graphics2D g2) {
-        if (endGame) {
+        this.g2 = g2;
+        g2.setFont(tNewRoman);
+        g2.setColor(Color.WHITE);
+
+        switch (gp.gameState) {
+            case PLAYING:
+                break;
+            case PAUSED:
+                drawPauseScreen();
+                break;
+            case DIALOGUE:
+
+        }
+
+    }
+
+    public void printMessage(String text) {
+        message = text;
+        messageOn = true;
+    }
+
+    public void drawPauseScreen() {
+        String text = "PAUSED GAME";
+        int x = xForCenteredText(text);
+        int y = gp.screenHeight / 3;
+        g2.drawString(text, x, y);
+    }
+
+    public int xForCenteredText(String text) {
+        int textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); //returns length of text
+        return gp.getWidth() / 2 - textLength / 2;
+    }
+}
+
+/*if (endGame) {
             g2.setFont(tNewRoman);
             g2.setColor(Color.BLUE);
             g2.setFont(g2.getFont().deriveFont(60F));
@@ -44,7 +77,7 @@ public class UI {
         } else {
             g2.setFont(tNewRoman);
             g2.setColor(Color.MAGENTA);
-            g2.drawImage(imgKey, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
+            //g2.drawImage(imgKey, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
             g2.drawString("x " + gp.player.keyCounter, 74, 60);
 
             playTime += (double) 1/60;
@@ -61,11 +94,4 @@ public class UI {
                     messageCounter = 0;
                 }
             }
-        }
-    }
-
-    public void printMessage(String text) {
-        message = text;
-        messageOn = true;
-    }
-}
+        }*/
