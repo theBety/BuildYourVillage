@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Random;
 
 public abstract class Entity {
     GamePanel gp;
@@ -22,18 +23,22 @@ public abstract class Entity {
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int counterForEntityMovement = 0;
+    public String[] dialogues = new String[10];
+    UtilityTool utilityTool = new UtilityTool();
+    int dialogueCounter = 0;
+
     public Entity(GamePanel gp) {
         this.gp = gp;
     }
 
     /**
-     * Scales images. Why? - saves time.
+     * Scaled images. Why? - saves time.
      *
      * @param imageName path and name of an image
      * @return scaled image
      */
     public BufferedImage setUpImage(String imageName) {
-        UtilityTool utilityTool = new UtilityTool();
+
         BufferedImage scaledImage;
         try {
             scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imageName + ".png")));
@@ -45,7 +50,15 @@ public abstract class Entity {
     }
 
     public void action(){
+        counterForEntityMovement++;
 
+        if(counterForEntityMovement == 90){
+            Random rd = new Random();
+            int index = rd.nextInt(4);
+            Directions directionFromEnum = Directions.values()[index];
+            direction = directionFromEnum.toString().toLowerCase();
+            counterForEntityMovement = 0;
+        }
     }
 
     public void update(){
@@ -81,10 +94,36 @@ public abstract class Entity {
             }
         }
     }
+//dialog nefunguje nevim proc
+    public void speak() {
+        if (dialogues[dialogueCounter] == null){
+            dialogueCounter = 0;
+        }else{
+            gp.ui.currentDialogue = dialogues[dialogueCounter];
+            dialogueCounter++;
+        }
+//So NPC is facing the player.
+        switch (gp.player.direction){
+            case "up":
+                direction = "down";
+                break;
+            case "down":
+                direction = "up";
+                break;
+            case "left":
+                direction = "right";
+                break;
+            case "right":
+                direction = "left";
+                break;
+        }
+    }
 
     /**
-     * This method firstly calculates if entity is can be visible on a screen. If not, nothing happens because there's nothing to draw.
-     * But if so, based on sprite number (this number is constantly switching from 1 to 2, it just shows what image to draw so it looks
+     * This method firstly calculates if an entity can be visible on a screen.
+     * If not, nothing happens because there's nothing to draw.
+     * But if so, based on sprite number
+     * (this number is constantly switching from 1 to 2, it just shows what image to draw so it looks
      * like the character is walking) one picture is selected and drawn.
      * @param g2 drawing with help of graphics2D
      */

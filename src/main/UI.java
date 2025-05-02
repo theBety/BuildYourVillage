@@ -1,7 +1,5 @@
 package main;
 
-import object.ObjKey;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
@@ -14,6 +12,10 @@ public class UI {
     public String message = "";
     int messageCounter = 0;
     public boolean endGame = false;
+    public String currentDialogue = "";
+    Font bookMan;
+    public int commandNum = 0;
+    public int SettingsInTitleScreen = 0;
 
     double playTime;
     DecimalFormat formatTime = new DecimalFormat("#0.0");
@@ -21,6 +23,7 @@ public class UI {
     public UI(GamePanel gp) {
         this.gp = gp;
         tNewRoman = new Font("TimesRoman", Font.PLAIN, 30);
+        bookMan = new Font("Bookman Old Style", Font.PLAIN, 30);
     }
 
     public void draw(Graphics2D g2) {
@@ -35,7 +38,11 @@ public class UI {
                 drawPauseScreen();
                 break;
             case DIALOGUE:
-
+                drawDialogueScreen();
+                break;
+            case TITLE:
+                drawTitleScreen();
+                break;
         }
 
     }
@@ -52,6 +59,91 @@ public class UI {
         g2.drawString(text, x, y);
     }
 
+    /**
+     * Draw dialogues. The window and the text
+     */
+    public void drawDialogueScreen() {
+        int x = gp.tileSize * 3;
+        int y = gp.tileSize;
+        int width = gp.screenWidth - (gp.tileSize * 6);
+        int height = gp.tileSize * 4;
+        drawPopUpWindow(x, y, width, height);
+
+        //These x,y are moves so the text doesn't start at the very edge.
+        g2.setColor(new Color(126, 42, 83, 255));
+        g2.setFont(bookMan);
+        x += gp.tileSize / 2;
+        y += gp.tileSize;
+        for (String line : currentDialogue.split("\n")) {
+            g2.drawString(line, x, y);
+            y += 40;
+        }
+
+    }
+
+    /**
+     * Draws title screen.
+     */
+    public void drawTitleScreen() {
+        g2.setColor(new Color(202, 153, 171));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.setColor(new Color(65, 21, 40));
+
+        g2.setFont(bookMan.deriveFont(Font.BOLD, 70));
+        String text = "BUILD YOUR VILLAGE";
+        int x = xForCenteredText(text);
+        int y = gp.screenHeight / 4;
+        g2.drawString(text, x, y);
+
+        g2.setFont(bookMan.deriveFont(Font.BOLD, 35));
+        text = "START";
+        x = xForCenteredText(text);
+        y += gp.tileSize * 5;
+        g2.drawString(text, x, y);
+        if(commandNum ==0){
+            g2.drawString("*", x-gp.tileSize,y);
+        }
+
+        y += gp.tileSize*2;
+        text = "HOW TO PLAY";
+        x = xForCenteredText(text);
+        g2.drawString(text, x, y);
+        if(commandNum ==1){
+            g2.drawString("*", x-gp.tileSize,y);
+        }
+
+        y -= gp.tileSize*6;
+        x = (gp.screenWidth / 2) - gp.tileSize;
+        g2.drawImage(gp.player.down1, x, y, gp.tileSize * 2, gp.tileSize * 2, null);
+    }
+
+    /**
+     * Draws "Pop up" windows.
+     * Why separated method?
+     * Well, we can draw different sizes of windows, so it's practical to have method for all the windows.
+     *
+     * @param x      coordinate of the upper right corner
+     * @param y      coordinate of the upper right corner
+     * @param width  width of the window
+     * @param height height of the window
+     */
+    public void drawPopUpWindow(int x, int y, int width, int height) {
+        //4. number - alfa - capacity
+        g2.setColor(new Color(205, 173, 171, 210));
+        g2.fillRoundRect(x, y, width, height, 25, 25);
+        g2.setStroke(new BasicStroke(5));
+        g2.setColor(new Color(138, 130, 120));
+        //draws rectangle, these numbers are there, so it looks better.
+        g2.drawRoundRect(x + 2, y + 2, width - 5, height - 5, 25, 25);
+
+    }
+
+    /**
+     * Centers text to the middle of screen
+     *
+     * @param text text we want to center
+     * @return centered text
+     */
     public int xForCenteredText(String text) {
         int textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); //returns length of text
         return gp.getWidth() / 2 - textLength / 2;
@@ -89,7 +181,7 @@ public class UI {
                 g2.drawString(message, gp.tileSize / 2, gp.tileSize * 7);
                 messageCounter++;
 
-                if (messageCounter == 120) {//120frames - 60FPS = 2 seconds
+                if (messageCounter == 120) {//120frames - 60FPS = 2 s
                     messageOn = false;
                     messageCounter = 0;
                 }

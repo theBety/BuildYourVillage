@@ -8,9 +8,10 @@ public class Npc extends Entity {
 
     public Npc(GamePanel gp) {
         super(gp);
-        direction = "down";
+        direction = "left";
         speed = 2;
         getNpcImage();
+        setDialouge();
     }
 
     public void getNpcImage() {
@@ -25,12 +26,12 @@ public class Npc extends Entity {
     }
 
     /**
-     * The simplest AI movement. Every 2 seconds direction on a npc randomly changes.
+     * The simplest AI movement. Every 2-second direction on a npc randomly changes.
      */
-    public void action(){
+    public void action() {
         counterForEntityMovement++;
 
-        if(counterForEntityMovement == 120){
+        if (counterForEntityMovement == 120) {
             Random rd = new Random();
             int index = rd.nextInt(4);
             Directions directionFromEnum = Directions.values()[index];
@@ -38,4 +39,14 @@ public class Npc extends Entity {
             counterForEntityMovement = 0;
         }
     }
+
+    public void setDialouge() {
+        dialogues[0] = "HI!! How can i help you?";
+        dialogues[1] = "You seem lost. I'll explain you everything.\nYou're here in our little world.";
+    }
+
+    public void speak(){
+        super.speak();
+    }
+
 }

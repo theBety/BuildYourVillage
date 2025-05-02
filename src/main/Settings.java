@@ -6,6 +6,9 @@ public class Settings {
 
     JFrame frame = new JFrame();
 
+    /**
+     * Starts everything in a game. Sets main things about gamePanel and starts the whole game.
+     */
     public Settings() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);

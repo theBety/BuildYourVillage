@@ -1,14 +1,10 @@
 package entity;
 
 import main.GamePanel;
+import main.GameState;
 import main.KeyHandler;
-import main.UtilityTool;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class Player extends Entity {
     KeyHandler keyH;
@@ -26,7 +22,7 @@ public class Player extends Entity {
     }
 
     public void setValues() {
-        worldX = gp.tileSize * 23; //Start position of a player. the number is tiles x,y. YOU CAN CHANGE THAT
+        worldX = gp.tileSize * 23; //Start position of a player. The number is tiles x,y. YOU CAN CHANGE THAT
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
@@ -47,9 +43,11 @@ public class Player extends Entity {
     }
 
     /**
-     * based on what key is pressed, player moves to some direction. Then, program checks if there's collision happening.
-     * if not, spriteCounter++. if the counter is bigger than 13, it resets. (13 means that the images are changing every 13 frames.
-     * because this game has 60 FPS).
+     * Based on what key is pressed, the player moves to some direction.
+     * Then, the program checks if there's a collision happening.
+     * If not, spriteCounter++.
+     * If the counter is bigger than 13, it resets.
+     * (13 means that the images are changing every 13 frames because this game has 60 FPS).
      */
     public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
@@ -105,7 +103,8 @@ public class Player extends Entity {
     }
     public void interactWithNpc(int i){
         if(i !=-1){
-            System.out.println("You're hitting npc");
+            gp.gameState = GameState.DIALOGUE;
+            gp.npc[i].speak();
         }
     }
 
@@ -156,6 +155,6 @@ String objectName = gp.objects[index].name;
                 case "key":
                     gp.objects[index] = null;
                     gp.ui.printMessage("You picked up key"); //prints message on a screen.
-                    break;
+                    Break;
             }
  */
