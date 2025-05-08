@@ -14,18 +14,29 @@ public abstract class Entity {
     GamePanel gp;
     public int worldX;
     public int worldY;
-    public int speed;
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public String direction;
-    public int spriteCounter = 0;
-    public int spriteNumber = 1;
-    public Rectangle solidArea = new Rectangle(8, 16, 32, 32);
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public boolean collisionOn = false;
+
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage up1Axe1, up1Axe2, down1Axe1, down1Axe2, left1Axe1, left1Axe2, right1Axe1, right1Axe2;
+
+    public String direction = "down";
+    public int spriteCounter = 0;
+    int dialogueCounter = 0;
     public int counterForEntityMovement = 0;
+    public int spriteNumber = 1;
+    public int speed;
+    public boolean collisionOn = false;
+    boolean attacking = false;
+
+    public Rectangle solidArea = new Rectangle(8, 16, 32, 32);
+    public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public String[] dialogues = new String[10];
     UtilityTool utilityTool = new UtilityTool();
-    int dialogueCounter = 0;
+
+
+    public BufferedImage image;
+    public String name;
+    public boolean collisionObject = false;
 
     public Entity(GamePanel gp) {
         this.gp = gp;
@@ -37,12 +48,12 @@ public abstract class Entity {
      * @param imageName path and name of an image
      * @return scaled image
      */
-    public BufferedImage setUpImage(String imageName) {
+    public BufferedImage setUpImage(String imageName, int width, int height) {
 
         BufferedImage scaledImage;
         try {
             scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imageName + ".png")));
-            scaledImage = utilityTool.scaledImage(scaledImage, gp.tileSize, gp.tileSize);
+            scaledImage = utilityTool.scaledImage(scaledImage, width, height);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

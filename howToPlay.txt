@@ -1,0 +1,8 @@
+Your goal is to build a village - to build enough houses
+for all the villagers.
+How? You need to collect materials such as wood,
+stone or wheat to be able to build houses.
+Controls:
+W, S, A, D - moving
+N - End conversation with a NPC.
+Enjoy the game!

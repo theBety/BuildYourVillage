@@ -2,11 +2,12 @@ package main;
 
 import entity.Entity;
 import entity.Player;
-import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable {
     //Screen settings
@@ -19,18 +20,20 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenHeight = tileSize * maxScreenRow; //720
 
     Thread gameThread;
-    KeyHandler keyH = new KeyHandler(this);
+    public KeyHandler keyH = new KeyHandler(this);
     int FPS = 60;
 
     public CheckCollision checkCollision = new CheckCollision(this);
     public TileManager tm = new TileManager(this);
     public Player player = new Player(this, keyH);
     public PlacingSetter plSetter = new PlacingSetter(this);
-    public SuperObject[] objects = new SuperObject[10];
+    public Entity[] objects = new Entity[2000];
     public Entity[] npc = new Entity[5];
     SoundManager soundMusic = new SoundManager();
     SoundManager soundEffects = new SoundManager();
     public UI ui = new UI(this);
+    ArrayList<Entity> entitiesAndObjects = new ArrayList<>();
+    //public EventManager eventManager = new EventManager(this);
 
     //World settings
     public final int maxWorldCol = 50;
@@ -51,10 +54,11 @@ public class GamePanel extends JPanel implements Runnable {
      */
     public void settingsForGame() {
         //places objects on a map
-        //plSetter.setObject();
+        plSetter.setObject();
         plSetter.setNpc();
+        plSetter.setTrees();
         playSound(0);
-        //gameState = GameState.TITLE;
+        gameState = GameState.TITLE;
     }
 
     public void startGameTime() {
@@ -98,26 +102,35 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    /**
+     * Draws on screen.
+     * @param g the <code>Graphics</code> object to protect
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
         if (!gameState.equals(GameState.TITLE)) {
+            //Render order. Why didn't I use treeSet? I want to save duplicates, so I needed something else.
             tm.draw(g2); //draw tile
-            //draw an object
-            for (SuperObject object : objects) {
+            entitiesAndObjects.add(player);
+            for(Entity npc: npc){
+                if(npc != null){
+                    entitiesAndObjects.add(npc);
+                }
+            }
+            for (Entity object : objects) {
                 if (object != null) {
-                    object.drawObject(g2, this);
+                    entitiesAndObjects.add(object);
                 }
             }
-            for (Entity entity : npc) {
-                if (entity != null) {
-                    entity.draw(g2);
-                }
-            }
-            player.draw(g2); //draw player
             ui.draw(g2);
 
+            entitiesAndObjects.sort(Comparator.comparingInt(o -> o.worldY)); //sorts list by worldY
+            for(Entity entity: entitiesAndObjects){
+                entity.draw(g2);
+            }
+            entitiesAndObjects.clear();
             g2.dispose();
         }else{
             ui.draw(g2);

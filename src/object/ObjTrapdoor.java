@@ -1,22 +1,14 @@
 package object;
 
+import entity.Entity;
 import main.GamePanel;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
-
-public class ObjTrapdoor extends SuperObject{
-    GamePanel gp;
-
+public class ObjTrapdoor extends Entity {
     public ObjTrapdoor(GamePanel gp) {
+        super(gp);
+
         name = "trapdoor";
-        try{
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/objects/trapdoor.png")));
-            utilityTool.scaledImage(image, gp.tileSize, gp.tileSize);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        down1 = setUpImage("/objects/trapdoor", gp.tileSize, gp.tileSize);
         collisionObject = true;
     }
 }

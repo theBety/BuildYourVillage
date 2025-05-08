@@ -15,14 +15,14 @@ public class Npc extends Entity {
     }
 
     public void getNpcImage() {
-        up1 = setUpImage("/NPC/back1NPC");
-        up2 = setUpImage("/NPC/back2NPC");
-        down1 = setUpImage("/NPC/front1NPC");
-        down2 = setUpImage("/NPC/front2NPC");
-        left1 = setUpImage("/NPC/leftStandNPC");
-        left2 = setUpImage("/NPC/leftStand2NPC");
-        right1 = setUpImage("/NPC/rightStandNPC");
-        right2 = setUpImage("/NPC/rightStand2NPC");
+        up1 = setUpImage("/NPC/back1NPC", gp.tileSize, gp.tileSize);
+        up2 = setUpImage("/NPC/back2NPC", gp.tileSize, gp.tileSize);
+        down1 = setUpImage("/NPC/front1NPC", gp.tileSize, gp.tileSize);
+        down2 = setUpImage("/NPC/front2NPC", gp.tileSize, gp.tileSize);
+        left1 = setUpImage("/NPC/leftStandNPC", gp.tileSize, gp.tileSize);
+        left2 = setUpImage("/NPC/leftStand2NPC", gp.tileSize, gp.tileSize);
+        right1 = setUpImage("/NPC/rightStandNPC", gp.tileSize, gp.tileSize);
+        right2 = setUpImage("/NPC/rightStand2NPC", gp.tileSize, gp.tileSize);
     }
 
     /**

@@ -1,14 +1,12 @@
 package tile;
 
 import main.GamePanel;
+import main.PlacingSetter;
 import main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Objects;
 
 public class TileManager {
@@ -29,12 +27,29 @@ public class TileManager {
      * "Initializes" all the tiles
      */
     public void getTileImage() {
+        try{
+            BufferedReader br = new BufferedReader(new FileReader("loadTiles.txt"));
+            String line;
+            int count = 0;
+            while ((line = br.readLine()) != null) {
+                if(count == 27 || count == 34 || count == 41){
+                    count++;
+                }
+                String[] split = line.split(",");
+                setUpImage(count, split[0], Boolean.parseBoolean(split[1]));
+                count++;
+            }
+        }catch(IOException i){
+            System.out.println("ups");
+        }
+
+        /*
         setUpImage(0, "grassWithGrass", false);
         setUpImage(1, "leftTopStone", false);
         setUpImage(2, "rightStone", false);
         setUpImage(3, "leftWheatField", false);
         setUpImage(4, "rightTopStone", false);
-        setUpImage(5, "tree", true);
+        setUpImage(5, "treeTrunk", true);
         setUpImage(6, "eWater3", true);
         setUpImage(7, "leftBottomClay", false);
         setUpImage(8, "leftBottomWheatField", false);
@@ -73,7 +88,7 @@ public class TileManager {
         setUpImage(44, "bottomWheatField", false);
         setUpImage(45, "clay", false);
         setUpImage(46, "eWater1", true);
-        setUpImage(47, "eWater2", true);
+        setUpImage(47, "eWater2", true);*/
     }
 
     public void setUpImage(int index, String imageName, boolean collision) {
@@ -99,6 +114,7 @@ public class TileManager {
                 while (col < gp.maxWorldCol) {
                     String[] numbers = text.split(",");
                     int num = Integer.parseInt(numbers[col]);
+
                     mapTileNum[col][row] = num;
                     col++;
                 }

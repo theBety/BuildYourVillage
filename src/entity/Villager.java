@@ -1,7 +1,6 @@
 package entity;
 
 import main.GamePanel;
-import object.SuperObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,14 +21,14 @@ public class Villager extends Entity {
 
 
     public void getVillagerImage(String typeOfVillager) {
-        up1 = setUpImage("/NPC/back1" + typeOfVillager + "Villager");
-        up2 = setUpImage("/NPC/back2" + typeOfVillager + "Villager");
-        down1 = setUpImage("/NPC/front1" + typeOfVillager + "Villager");
-        down2 = setUpImage("/NPC/front2" + typeOfVillager + "Villager");
-        left1 = setUpImage("/NPC/left1" + typeOfVillager + "Villager");
-        left2 = setUpImage("/NPC/left2" + typeOfVillager + "Villager");
-        right1 = setUpImage("/NPC/right1" + typeOfVillager + "Villager");
-        right2 = setUpImage("/NPC/right2" + typeOfVillager + "Villager");
+        up1 = setUpImage("/NPC/back1" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
+        up2 = setUpImage("/NPC/back2" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
+        down1 = setUpImage("/NPC/front1" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
+        down2 = setUpImage("/NPC/front2" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
+        left1 = setUpImage("/NPC/left1" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
+        left2 = setUpImage("/NPC/left2" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
+        right1 = setUpImage("/NPC/right1" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
+        right2 = setUpImage("/NPC/right2" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
     }
 
     //idk jestli funguje

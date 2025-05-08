@@ -1,7 +1,9 @@
 package main;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 public class UI {
@@ -43,6 +45,9 @@ public class UI {
             case TITLE:
                 drawTitleScreen();
                 break;
+            case TUTORIAL:
+                drawHowToPlayScreen();
+                break;
         }
 
     }
@@ -78,7 +83,6 @@ public class UI {
             g2.drawString(line, x, y);
             y += 40;
         }
-
     }
 
     /**
@@ -100,21 +104,61 @@ public class UI {
         x = xForCenteredText(text);
         y += gp.tileSize * 5;
         g2.drawString(text, x, y);
-        if(commandNum ==0){
-            g2.drawString("*", x-gp.tileSize,y);
+        if (commandNum == 0) {
+            g2.drawString("*", x - gp.tileSize, y);
         }
 
-        y += gp.tileSize*2;
+        y += gp.tileSize * 2;
         text = "HOW TO PLAY";
         x = xForCenteredText(text);
         g2.drawString(text, x, y);
-        if(commandNum ==1){
-            g2.drawString("*", x-gp.tileSize,y);
+        if (commandNum == 1) {
+            g2.drawString("*", x - gp.tileSize, y);
         }
 
-        y -= gp.tileSize*6;
+        y -= gp.tileSize * 6;
         x = (gp.screenWidth / 2) - gp.tileSize;
         g2.drawImage(gp.player.down1, x, y, gp.tileSize * 2, gp.tileSize * 2, null);
+    }
+
+    /**
+     * Draws screen after user hits "how to play" button.
+     */
+    public void drawHowToPlayScreen() {
+        g2.setColor(new Color(202, 153, 171));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.setColor(new Color(65, 21, 40));
+
+        g2.setFont(bookMan.deriveFont(Font.BOLD, 30));
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("howToPlay.txt"));
+            int helpInt = 2;
+            int x;
+            int y;
+            String text;
+            while ((text = br.readLine()) != null) {
+                if (helpInt == 6) {
+                    helpInt += 2;
+                    y = gp.tileSize * helpInt;
+                    x = gp.tileSize;
+                } else if (helpInt >= 9) {
+                    y = gp.tileSize * helpInt;
+                    x = xForCenteredText(text);
+                } else {
+                    y = gp.tileSize * helpInt;
+                    x = gp.tileSize;
+                }
+                g2.drawString(text, x, y);
+                helpInt++;
+            }
+            g2.setFont(bookMan.deriveFont(Font.BOLD, 35));
+            text = "* PLAY";
+            x = gp.screenWidth - gp.tileSize * 3;
+            y = gp.tileSize * (helpInt + 2);
+            g2.drawString(text, x, y);
+        } catch (IOException i) {
+            System.err.println("IO Exception help");
+        }
     }
 
     /**
@@ -135,7 +179,6 @@ public class UI {
         g2.setColor(new Color(138, 130, 120));
         //draws rectangle, these numbers are there, so it looks better.
         g2.drawRoundRect(x + 2, y + 2, width - 5, height - 5, 25, 25);
-
     }
 
     /**
