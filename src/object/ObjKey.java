@@ -10,6 +10,8 @@ public class ObjKey extends Entity {
 
         name = "key";
         down1 = setUpImage("/objects/key", gp.tileSize, gp.tileSize);
+        descriptionOfItem = "Name: Key.\nFor opening doors or chests.\nDon't lose it!";
+
     }
 
 }

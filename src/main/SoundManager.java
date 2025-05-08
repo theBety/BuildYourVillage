@@ -10,6 +10,7 @@ public class SoundManager {
 
     public SoundManager() {
         soundURL[0] = getClass().getResource("/sound/backgroundSong.wav");
+        soundURL[1] = getClass().getResource("/sound/selectInInventory.wav");
     }
 
     /**

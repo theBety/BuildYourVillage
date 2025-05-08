@@ -24,7 +24,6 @@ public abstract class Entity {
     int dialogueCounter = 0;
     public int counterForEntityMovement = 0;
     public int spriteNumber = 1;
-    public int speed;
     public boolean collisionOn = false;
     boolean attacking = false;
 
@@ -33,10 +32,18 @@ public abstract class Entity {
     public String[] dialogues = new String[10];
     UtilityTool utilityTool = new UtilityTool();
 
-
-    public BufferedImage image;
+    //Character Attributes
+    public int speed;
     public String name;
+    public int coins;
+    public Entity currentTool;
+    public Entity currentBoots;
+
+    //Item attributes
+    public int attackValue;
+    public BufferedImage image;
     public boolean collisionObject = false;
+    public String descriptionOfItem = "";
 
     public Entity(GamePanel gp) {
         this.gp = gp;

@@ -1,5 +1,7 @@
 package main;
 
+import entity.Entity;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,13 +14,17 @@ public class UI {
     Font tNewRoman;
     public boolean messageOn = false;
     public String message = "";
-    int messageCounter = 0;
-    public boolean endGame = false;
     public String currentDialogue = "";
     Font bookMan;
     public int commandNum = 0;
-    public int SettingsInTitleScreen = 0;
+    public int slotCol = 0;
+    public int slotRow = 0;
 
+
+    //for now, unused things.
+    int messageCounter = 0;
+    public boolean endGame = false;
+    public int SettingsInTitleScreen = 0;
     double playTime;
     DecimalFormat formatTime = new DecimalFormat("#0.0");
 
@@ -47,6 +53,9 @@ public class UI {
                 break;
             case TUTORIAL:
                 drawHowToPlayScreen();
+                break;
+            case CHARACTER:
+                drawInventory();
                 break;
         }
 
@@ -132,16 +141,16 @@ public class UI {
         g2.setFont(bookMan.deriveFont(Font.BOLD, 30));
         try {
             BufferedReader br = new BufferedReader(new FileReader("howToPlay.txt"));
-            int helpInt = 2;
+            int helpInt = 1;
             int x;
             int y;
             String text;
             while ((text = br.readLine()) != null) {
-                if (helpInt == 6) {
-                    helpInt += 2;
+                if (helpInt == 5) {
+                    helpInt += 1;
                     y = gp.tileSize * helpInt;
                     x = gp.tileSize;
-                } else if (helpInt >= 9) {
+                } else if (helpInt >= 5) {
                     y = gp.tileSize * helpInt;
                     x = xForCenteredText(text);
                 } else {
@@ -154,13 +163,74 @@ public class UI {
             g2.setFont(bookMan.deriveFont(Font.BOLD, 35));
             text = "* PLAY";
             x = gp.screenWidth - gp.tileSize * 3;
-            y = gp.tileSize * (helpInt + 2);
+            y = gp.tileSize * (helpInt + 1);
             g2.drawString(text, x, y);
         } catch (IOException i) {
             System.err.println("IO Exception help");
         }
     }
 
+    /**
+     * Draws players' inventory including items and cursor.
+     */
+    public void drawInventory() {
+        int frameX = gp.tileSize * 13;
+        int frameY = gp.tileSize;
+        int frameWidth = gp.tileSize * 6;
+        int frameHeight = gp.tileSize * 5;
+        drawPopUpWindow(frameX, frameY, frameWidth, frameHeight);
+
+        final int slotXStart = frameX + 20;
+        final int slotYStart = frameY + 20;
+        int slotX = slotXStart;
+        int slotY = slotYStart;
+
+        int cursorX = slotXStart + (gp.tileSize * slotCol);
+        int cursorY = slotYStart + (gp.tileSize * slotRow);
+        int cursorWidth = gp.tileSize;
+        int cursorHeight = gp.tileSize;
+        g2.setColor(new Color(80, 42, 80));
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+
+        for (int i = 0; i < gp.player.inventory.size(); i++) {
+            g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
+            slotX += gp.tileSize;
+            if(i ==4||i==9||i==14){
+                slotY += gp.tileSize;
+                slotX = slotXStart;
+            }
+        }
+
+        int desFrameX = frameX;
+        int desFrameY = frameY + frameHeight + gp.tileSize;
+        int desFrameWidth = frameWidth;
+        int desFrameHeight = gp.tileSize*3;
+        drawPopUpWindow(desFrameX, desFrameY, desFrameWidth, desFrameHeight);
+        int textX = desFrameX + 20;
+        int textY = desFrameY + gp.tileSize;
+        g2.setFont(g2.getFont().deriveFont(20F));
+        int indexOfItem = getItemIndexInInventory();
+        if(indexOfItem<gp.player.inventory.size()){
+            for(String line: gp.player.inventory.get(indexOfItem).descriptionOfItem.split("\n")){
+                g2.drawString(line, textX, textY);
+                textY += gp.tileSize/2;
+
+            }
+        }
+    }
+
+    public void drawCharacterStats() {
+        int frameX = gp.tileSize * 2;
+        int frameY = gp.tileSize;
+        int frameWidth = gp.tileSize * 4;
+        int frameHeight = gp.tileSize * 8;
+        drawPopUpWindow(frameX, frameY, frameWidth, frameHeight);
+    }
+
+    public int getItemIndexInInventory() {
+        return slotCol + (slotRow*5);
+    }
     /**
      * Draws "Pop up" windows.
      * Why separated method?
@@ -176,7 +246,7 @@ public class UI {
         g2.setColor(new Color(205, 173, 171, 210));
         g2.fillRoundRect(x, y, width, height, 25, 25);
         g2.setStroke(new BasicStroke(5));
-        g2.setColor(new Color(138, 130, 120));
+        g2.setColor(new Color(80, 42, 80));
         //draws rectangle, these numbers are there, so it looks better.
         g2.drawRoundRect(x + 2, y + 2, width - 5, height - 5, 25, 25);
     }

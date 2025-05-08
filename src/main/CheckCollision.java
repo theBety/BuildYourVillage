@@ -50,6 +50,7 @@ public class CheckCollision {
                 tileNum1 = gp.tm.mapTileNum[entityRightCol][entityTopRow];
                 tileNum2 = gp.tm.mapTileNum[entityRightCol][entityBottomRow];
                 if (gp.tm.tile[tileNum1].collision || gp.tm.tile[tileNum2].collision) entity.collisionOn = true;
+                break;
         }
     }
 
@@ -123,8 +124,9 @@ public class CheckCollision {
     /**
      * Method goes through Entities and compares theirs and players' solid areas if they hot each other at any coordinate.
      * If not, method returns -1. If so, method returns index of npc that collided with player
+     *
      * @param entity player
-     * @param npc array of NPCs
+     * @param npc    array of NPCs
      * @return index if collision happened or not.
      */
     public int checkEntity(Entity entity, Entity[] npc) {
@@ -182,6 +184,7 @@ public class CheckCollision {
     /**
      * Checks collision between player and entity (npc, for example). I need this method because if it wasn't there. Entity could go
      * through player but player not through entity. (Collision would be only one-sided).
+     *
      * @param entity
      */
     public void checkPlayer(Entity entity) {
@@ -194,22 +197,20 @@ public class CheckCollision {
         switch (entity.direction) {
             case "left":
                 entity.solidArea.x -= entity.speed;
-                if (entity.solidArea.intersects(gp.player.solidArea)) entity.collisionOn = true;
                 break;
             case "right":
                 entity.solidArea.x += entity.speed;
-                if (entity.solidArea.intersects(gp.player.solidArea)) entity.collisionOn = true;
                 break;
             case "up":
                 entity.solidArea.y -= entity.speed;
-                //checks if two rectangles are in collision
-                if (entity.solidArea.intersects(gp.player.solidArea)) entity.collisionOn = true;
                 break;
             case "down":
                 entity.solidArea.y += entity.speed;
-                if (entity.solidArea.intersects(gp.player.solidArea)) entity.collisionOn = true;
                 break;
         }
+        //checks if two rectangles are in collision
+        if (entity.solidArea.intersects(gp.player.solidArea)) entity.collisionOn = true;
+
         entity.solidArea.x = entity.solidAreaDefaultX;
         entity.solidArea.y = entity.solidAreaDefaultY;
         gp.player.solidArea.x = gp.player.solidAreaDefaultX;

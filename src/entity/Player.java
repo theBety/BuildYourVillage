@@ -3,14 +3,19 @@ package entity;
 import main.GamePanel;
 import main.GameState;
 import main.KeyHandler;
+import object.ObjKey;
+import object.ObjTrapdoor;
+import object.ToolAxe;
 
-import javax.swing.text.TabExpander;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Player extends Entity {
     KeyHandler keyH;
     public final int screenX, screenY;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    final int inventoryCapacity = 20;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -26,13 +31,32 @@ public class Player extends Entity {
         setValues();
         getPlayerImage();
         getAxeImages();
+        setDefaultItems();
     }
 
     public void setValues() {
         worldX = gp.tileSize * 23; //Start position of a player. The number is tiles x,y. YOU CAN CHANGE THAT
         worldY = gp.tileSize * 21;
+
         speed = 4;
         direction = "down";
+        coins = 0;
+        currentTool = new ToolAxe(gp);
+        //currentBoots = new boty;
+    }
+
+    public void setDefaultItems(){
+        inventory.add(currentTool);
+        inventory.add(new ObjKey(gp));
+        inventory.add(new ObjTrapdoor(gp));
+        inventory.add(new ObjKey(gp));
+        inventory.add(new ObjTrapdoor(gp));
+        inventory.add(new ObjKey(gp));
+        inventory.add(new ObjTrapdoor(gp));
+        inventory.add(new ObjKey(gp));
+        inventory.add(new ObjTrapdoor(gp));
+        inventory.add(new ObjKey(gp));
+        inventory.add(new ObjTrapdoor(gp));
     }
 
     /**
@@ -151,7 +175,6 @@ public class Player extends Entity {
 
             int currentWorldX = worldX;
             int currentWorldY = worldY;
-//11,19 strom
         }
         if (spriteCounter > 25) {
             spriteNumber = 1;

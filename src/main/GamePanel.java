@@ -104,36 +104,47 @@ public class GamePanel extends JPanel implements Runnable {
 
     /**
      * Draws on screen.
+     *
      * @param g the <code>Graphics</code> object to protect
      */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (!gameState.equals(GameState.TITLE)) {
+        if (gameState.equals(GameState.TITLE) || gameState.equals(GameState.TUTORIAL)) {
+            ui.draw(g2);
+        } else {
             //Render order. Why didn't I use treeSet? I want to save duplicates, so I needed something else.
             tm.draw(g2); //draw tile
             entitiesAndObjects.add(player);
-            for(Entity npc: npc){
-                if(npc != null){
+            for (Entity npc : npc) {
+                if (npc != null) {
                     entitiesAndObjects.add(npc);
                 }
             }
+
             for (Entity object : objects) {
                 if (object != null) {
                     entitiesAndObjects.add(object);
                 }
             }
-            ui.draw(g2);
-
             entitiesAndObjects.sort(Comparator.comparingInt(o -> o.worldY)); //sorts list by worldY
-            for(Entity entity: entitiesAndObjects){
+            for (Entity entity : entitiesAndObjects) {
                 entity.draw(g2);
             }
             entitiesAndObjects.clear();
-            g2.dispose();
-        }else{
             ui.draw(g2);
+            if (keyH.showDebug) {
+                g2.setColor(Color.white);
+                g2.setFont(new Font("Arial", Font.PLAIN, 30));
+
+                g2.drawString("WorldX: " + player.worldX, 10, 400);
+                g2.drawString("WorldY: " + player.worldY, 10, 430);
+                g2.drawString("Col: " + (player.worldX + player.solidArea.x) / tileSize, 10, 460);
+                g2.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, 10, 490);
+                g2.drawString("Game state: " + gameState, 10, 520);
+            }
+            g2.dispose();
         }
     }
 

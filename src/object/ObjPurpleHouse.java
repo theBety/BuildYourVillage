@@ -9,7 +9,7 @@ public class ObjPurpleHouse extends Entity {
         super(gp);
 
         name = "purpleHouse";
-        down1 = setUpImage("/objects/purpleHouse", gp.tileSize*2, gp.tileSize*2);
+        down1 = setUpImage("/objects/purpleHouse", gp.tileSize * 2, gp.tileSize * 2);
         collisionObject = true;
     }
 }
