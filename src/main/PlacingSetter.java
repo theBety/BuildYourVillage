@@ -3,6 +3,7 @@ package main;
 import entity.Npc;
 import entity.Villager;
 import entity.VillagerType;
+import interactiveTile.IntTileTree;
 import object.*;
 
 import java.io.*;
@@ -28,8 +29,18 @@ public class PlacingSetter {
         gp.objects[counterInObject].worldY = 18 * gp.tileSize;
         counterInObject++;
 
-        gp.objects[counterInObject] = new ObjTree(gp);
-        gp.objects[counterInObject].worldX = 11 * gp.tileSize;
+        gp.objects[counterInObject] = new ObjKey(gp);
+        gp.objects[counterInObject].worldX = 23 * gp.tileSize;
+        gp.objects[counterInObject].worldY = 19 * gp.tileSize;
+        counterInObject++;
+
+        gp.objects[counterInObject] = new ObjKey(gp);
+        gp.objects[counterInObject].worldX = 26 * gp.tileSize;
+        gp.objects[counterInObject].worldY = 17 * gp.tileSize;
+        counterInObject++;
+
+        gp.objects[counterInObject] = new ObjCoin(gp);
+        gp.objects[counterInObject].worldX = 28 * gp.tileSize;
         gp.objects[counterInObject].worldY = 19 * gp.tileSize;
         counterInObject++;
     }
@@ -52,23 +63,24 @@ public class PlacingSetter {
         gp.npc[3].worldY = 32 * gp.tileSize;
     }
 
-    public void setTrees() {
+    /**
+     * Places trees (leaves) on every tree trunk.
+     */
+    public void setInteractiveTile() {
         try {
             InputStream is = getClass().getResourceAsStream("/maps/worldMap2.csv");
             BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)));
             int col = 0;
             int row = 0;
-
+            int counterInITile = 0;
             while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
                 String text = br.readLine();
                 while (col < gp.maxWorldCol) {
                     String[] numbers = text.split(",");
                     int num = Integer.parseInt(numbers[col]);
                     if (num == 5) {
-                        gp.objects[counterInObject] = new ObjTree(gp);
-                        gp.objects[counterInObject].worldX = col * gp.tileSize;
-                        gp.objects[counterInObject].worldY = row * gp.tileSize;
-                        counterInObject++;
+                        gp.iTile[counterInITile] = new IntTileTree(gp, col, row);
+                        counterInITile++;
                     }
                     col++;
                 }
@@ -78,10 +90,8 @@ public class PlacingSetter {
                 }
             }
             br.close();
-
         } catch (IOException e) {
             System.out.println("Something's wrong in placing setter");
         }
-
     }
 }

@@ -1,28 +1,27 @@
 package main;
 
-import entity.Entity;
-
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class UI {
     GamePanel gp;
     Graphics2D g2;
     Font tNewRoman;
     public boolean messageOn = false;
-    public String message = "";
     public String currentDialogue = "";
     Font bookMan;
     public int commandNum = 0;
     public int slotCol = 0;
     public int slotRow = 0;
+    ArrayList<String> messages = new ArrayList<>();
+    ArrayList<Integer> messageCounter = new ArrayList<>();
 
 
     //for now, unused things.
-    int messageCounter = 0;
     public boolean endGame = false;
     public int SettingsInTitleScreen = 0;
     double playTime;
@@ -41,11 +40,13 @@ public class UI {
 
         switch (gp.gameState) {
             case PLAYING:
+                drawMessages();
                 break;
             case PAUSED:
                 drawPauseScreen();
                 break;
             case DIALOGUE:
+                gp.player.exp++;
                 drawDialogueScreen();
                 break;
             case TITLE:
@@ -56,20 +57,49 @@ public class UI {
                 break;
             case CHARACTER:
                 drawInventory();
+                drawInfoScreen();
                 break;
         }
 
     }
 
-    public void printMessage(String text) {
-        message = text;
-        messageOn = true;
+    public void addMessage(String text) {
+        messages.add(text);
+        messageCounter.add(0);
+    }
+
+    /**
+     * Draw messages on a screen.
+     */
+    public void drawMessages() {
+        int messageX = gp.tileSize;
+        int messageY = gp.tileSize;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
+
+        for (int i = 0; i < messages.size(); i++) {
+            if (messages.get(i) != null) {
+
+                g2.setColor(Color.white);
+                g2.drawString(messages.get(i), messageX, messageY);
+                int counter = messageCounter.get(i) + 1;
+                messageCounter.set(i, counter); //replaces i with counter
+                messageY += 50;
+                //so the message disappears after 3 seconds
+                if (messageCounter.get(i) >= 180) {
+                    messages.remove(i);
+                    messageCounter.remove(i);
+                }
+            }
+        }
+
     }
 
     public void drawPauseScreen() {
         String text = "PAUSED GAME";
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
+        g2.setColor(new Color(126, 42, 83, 255));
         int x = xForCenteredText(text);
-        int y = gp.screenHeight / 3;
+        int y = gp.screenHeight / 2;
         g2.drawString(text, x, y);
     }
 
@@ -194,30 +224,65 @@ public class UI {
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
 
         for (int i = 0; i < gp.player.inventory.size(); i++) {
+
+            if (gp.player.inventory.get(i) == gp.player.currentTool) {
+                g2.setColor(new Color(162, 76, 97));
+                g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
+            }
             g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
             slotX += gp.tileSize;
-            if(i ==4||i==9||i==14){
+            if (i == 4 || i == 9 || i == 14) {
                 slotY += gp.tileSize;
                 slotX = slotXStart;
             }
         }
 
-        int desFrameX = frameX;
         int desFrameY = frameY + frameHeight + gp.tileSize;
-        int desFrameWidth = frameWidth;
-        int desFrameHeight = gp.tileSize*3;
-        drawPopUpWindow(desFrameX, desFrameY, desFrameWidth, desFrameHeight);
-        int textX = desFrameX + 20;
+        int desFrameHeight = gp.tileSize * 3;
+
+        int textX = frameX + 20;
         int textY = desFrameY + gp.tileSize;
         g2.setFont(g2.getFont().deriveFont(20F));
         int indexOfItem = getItemIndexInInventory();
-        if(indexOfItem<gp.player.inventory.size()){
-            for(String line: gp.player.inventory.get(indexOfItem).descriptionOfItem.split("\n")){
-                g2.drawString(line, textX, textY);
-                textY += gp.tileSize/2;
 
+        if (indexOfItem < gp.player.inventory.size()) {
+            drawPopUpWindow(frameX, desFrameY, frameWidth, desFrameHeight);
+            for (String line : gp.player.inventory.get(indexOfItem).descriptionOfItem.split("\n")) {
+                g2.drawString(line, textX, textY);
+                textY += gp.tileSize / 2;
             }
         }
+    }
+
+    public void drawInfoScreen() {
+        int frameX = gp.tileSize;
+        int frameY = gp.tileSize;
+        int frameWidth = gp.tileSize * 5;
+        int frameHeight = gp.tileSize * 7;
+        drawPopUpWindow(frameX, frameY, frameWidth, frameHeight);
+        int yForText = frameY + gp.tileSize;
+        int xFortext = gp.tileSize + 20;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
+        g2.drawString("STATISTICS", frameX + 38, yForText);
+        yForText += gp.tileSize;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 25F));
+        g2.drawString("Level: " + gp.player.level, xFortext, yForText);
+        yForText += gp.tileSize;
+        g2.drawString("Coins: " + gp.player.coins, xFortext, yForText);
+        yForText += gp.tileSize;
+        g2.drawString("Strength: " + gp.player.strength, xFortext, yForText);
+        yForText += gp.tileSize;
+        g2.drawString("Current tool: ", xFortext, yForText);
+        g2.drawImage(gp.player.currentTool.down1, xFortext + (gp.tileSize * 3) + 10, yForText - gp.tileSize / 2, null);
+    }
+
+    /**
+     * When in inventory, slots are drawn 4x5, so this method returns index of item in arraylist.
+     *
+     * @return index of item in arraylist.
+     */
+    public int getItemIndexInInventory() {
+        return slotCol + (slotRow * 5);
     }
 
     public void drawCharacterStats() {
@@ -228,9 +293,6 @@ public class UI {
         drawPopUpWindow(frameX, frameY, frameWidth, frameHeight);
     }
 
-    public int getItemIndexInInventory() {
-        return slotCol + (slotRow*5);
-    }
     /**
      * Draws "Pop up" windows.
      * Why separated method?

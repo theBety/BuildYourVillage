@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Villager extends Entity {
     public HashMap<Integer, String> trades = new HashMap<>();
@@ -72,5 +73,17 @@ public class Villager extends Entity {
 
     public void speak() {
         super.speak();
+    }
+
+    public void action(){
+        counterForEntityMovement++;
+
+        if(counterForEntityMovement == 90){
+            Random rd = new Random();
+            int index = rd.nextInt(4);
+            Directions directionFromEnum = Directions.values()[index];
+            direction = directionFromEnum.toString().toLowerCase();
+            counterForEntityMovement = 0;
+        }
     }
 }

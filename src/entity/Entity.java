@@ -1,6 +1,7 @@
 package entity;
 
 import main.GamePanel;
+import main.ToolType;
 import main.UtilityTool;
 
 import javax.imageio.ImageIO;
@@ -8,7 +9,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.Random;
 
 public abstract class Entity {
     GamePanel gp;
@@ -22,6 +22,7 @@ public abstract class Entity {
     public String direction = "down";
     public int spriteCounter = 0;
     int dialogueCounter = 0;
+    public int invincibleCounter = 0;
     public int counterForEntityMovement = 0;
     public int spriteNumber = 1;
     public boolean collisionOn = false;
@@ -35,15 +36,25 @@ public abstract class Entity {
     //Character Attributes
     public int speed;
     public String name;
+    public boolean isInvincible = false;
     public int coins;
+    public int strength;
+    public int attack;
     public Entity currentTool;
     public Entity currentBoots;
+    public int life;
+    public int level;
+    public int exp;
+    public int expToNextLevel;
+    public int value;
+
 
     //Item attributes
     public int attackValue;
     public BufferedImage image;
     public boolean collisionObject = false;
     public String descriptionOfItem = "";
+    public ToolType toolType;
 
     public Entity(GamePanel gp) {
         this.gp = gp;
@@ -67,25 +78,26 @@ public abstract class Entity {
         return scaledImage;
     }
 
-    public void action(){
-        counterForEntityMovement++;
-
-        if(counterForEntityMovement == 90){
-            Random rd = new Random();
-            int index = rd.nextInt(4);
-            Directions directionFromEnum = Directions.values()[index];
-            direction = directionFromEnum.toString().toLowerCase();
-            counterForEntityMovement = 0;
-        }
+    /**
+     * Movement for player.
+     */
+    public void action() {
     }
 
-    public void update(){
-        action();
+    public void useObject(Entity e) {
+        //video 28
+    }
 
+    /**
+     * Updates entity movement. Checks if entity isn't walking through something they can't.
+     */
+    public void update() {
+        action();
         collisionOn = false;
         gp.checkCollision.checkTile(this);
         gp.checkCollision.checkPlayer(this);
         gp.checkCollision.checkObject(this, false);
+        gp.checkCollision.checkEntity(this, gp.iTile);
         if (!collisionOn) {
             switch (direction) {
                 case "up":
@@ -112,16 +124,17 @@ public abstract class Entity {
             }
         }
     }
-//dialog nefunguje nevim proc
+
+    //dialog nefunguje nevim proc
     public void speak() {
-        if (dialogues[dialogueCounter] == null){
+        if (dialogues[dialogueCounter] == null) {
             dialogueCounter = 0;
-        }else{
+        } else {
             gp.ui.currentDialogue = dialogues[dialogueCounter];
             dialogueCounter++;
         }
-//So NPC is facing the player.
-        switch (gp.player.direction){
+        //So NPC is facing the player.
+        switch (gp.player.direction) {
             case "up":
                 direction = "down";
                 break;
@@ -143,6 +156,7 @@ public abstract class Entity {
      * But if so, based on sprite number
      * (this number is constantly switching from 1 to 2, it just shows what image to draw so it looks
      * like the character is walking) one picture is selected and drawn.
+     *
      * @param g2 drawing with help of graphics2D
      */
     public void draw(Graphics2D g2) {
