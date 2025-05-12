@@ -54,7 +54,7 @@ public abstract class Entity {
     public BufferedImage image;
     public boolean collisionObject = false;
     public String descriptionOfItem = "";
-    public ToolType toolType;
+    public ToolType typeOfItem;
 
     public Entity(GamePanel gp) {
         this.gp = gp;
@@ -67,7 +67,6 @@ public abstract class Entity {
      * @return scaled image
      */
     public BufferedImage setUpImage(String imageName, int width, int height) {
-
         BufferedImage scaledImage;
         try {
             scaledImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imageName + ".png")));
@@ -86,6 +85,16 @@ public abstract class Entity {
 
     public void useObject(Entity e) {
         //video 28
+    }
+    public void dropItem(Entity droppedItem){
+        for (int i = 0; i < gp.objects.length; i++) {
+            if(gp.objects[i] == null){
+                gp.objects[i] = droppedItem;
+                gp.objects[i].worldX = worldX;
+                gp.objects[i].worldY = worldY;
+                break;
+            }
+        }
     }
 
     /**

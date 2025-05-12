@@ -4,10 +4,7 @@ import main.GamePanel;
 import main.GameState;
 import main.KeyHandler;
 import main.ToolType;
-import object.ObjKey;
-import object.ObjTrapdoor;
-import object.ToolAxe;
-import object.ToolPicaxe;
+import object.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -87,7 +84,7 @@ public class Player extends Entity {
      *
      */
     public void getAttackImages() {
-        if (currentTool.toolType == ToolType.AXE) {
+        if (currentTool.typeOfItem == ToolType.AXE) {
             up1Axe1 = setUpImage("/player/back1Axe1", gp.tileSize * 2, gp.tileSize);
             up1Axe2 = setUpImage("/player/back1Axe2", gp.tileSize * 2, gp.tileSize);
             down1Axe1 = setUpImage("/player/front1Axe1", gp.tileSize * 2, gp.tileSize);
@@ -179,20 +176,21 @@ public class Player extends Entity {
     public void pickUpObject(int index) {
         String text;
         if (index != -1) {
-            if (gp.objects[index].toolType.equals(ToolType.PICKUP)) {
+            if (gp.objects[index].typeOfItem.equals(ToolType.PICKUP)) {
                 gp.objects[index].useObject(this);
+                gp.objects[index] = null;
             } else {
                 if (inventory.size() != inventoryCapacity && !gp.objects[index].collisionObject) {
                     inventory.add(gp.objects[index]);
                     //play sound effect
                     text = "You picked up a " + gp.objects[index].name + "!";
                     exp += 3;
+                    gp.objects[index] = null;
                 } else {
                     text = "You can't carry more objects :(";
                 }
                 gp.ui.addMessage(text);
             }
-            gp.objects[index] = null;
         }
     }
 
@@ -265,6 +263,7 @@ public class Player extends Entity {
 
             if (gp.iTile[index].life <= 0) {
                 gp.iTile[index] = null;
+                dropItem(new ObjLog(gp));
             }
         }
     }
@@ -277,12 +276,12 @@ public class Player extends Entity {
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.toolType == ToolType.AXE || selectedItem.toolType == ToolType.PICAXE) {
+            if (selectedItem.typeOfItem == ToolType.AXE || selectedItem.typeOfItem == ToolType.PICAXE) {
                 currentTool = selectedItem;
                 attack = getAttack();
                 getAttackImages();
             }
-            if (selectedItem.toolType == ToolType.MATERIAL) {
+            if (selectedItem.typeOfItem == ToolType.MATERIAL) {
                 //jeste nevim jestli funguje
                 selectedItem.useObject(this);
                 inventory.remove(itemIndex);

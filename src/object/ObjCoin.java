@@ -10,7 +10,7 @@ public class ObjCoin extends Entity {
         super(gp);
         this.gp = gp;
 
-        toolType = ToolType.PICKUP;
+        typeOfItem = ToolType.PICKUP;
         name = "coin";
         value = 5;
         down1 = setUpImage("/objects/coin", gp.tileSize, gp.tileSize);

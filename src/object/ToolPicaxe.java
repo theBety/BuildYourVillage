@@ -29,7 +29,7 @@ public class ToolPicaxe extends Entity {
                 attackArea.width = 35;
                 break;
         }
-        toolType = ToolType.PICAXE;
+        typeOfItem = ToolType.PICAXE;
         attackValue = level;
     }
 }

@@ -20,7 +20,7 @@ public class IntTileTree extends InteractiveTile{
     }
 
     public boolean isRequiredItem(Entity entity){
-        return entity.currentTool.toolType == ToolType.AXE;
+        return entity.currentTool.typeOfItem == ToolType.AXE;
     }
 
     public void playSoundEffect(){

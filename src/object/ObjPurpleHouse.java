@@ -2,6 +2,7 @@ package object;
 
 import entity.Entity;
 import main.GamePanel;
+import main.ToolType;
 
 public class ObjPurpleHouse extends Entity {
 
@@ -9,7 +10,8 @@ public class ObjPurpleHouse extends Entity {
         super(gp);
 
         name = "purpleHouse";
-        down1 = setUpImage("/objects/purpleHouse", gp.tileSize * 2, gp.tileSize * 2);
+        typeOfItem = ToolType.PLACED;
+        down1 = setUpImage("/objects/purpleHouse", gp.tileSize * 2, gp.tileSize);
         collisionObject = true;
     }
 }

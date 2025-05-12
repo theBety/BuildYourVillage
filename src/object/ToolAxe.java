@@ -29,7 +29,7 @@ public class ToolAxe extends Entity {
                 attackArea.width = 35;
                 break;
         }
-        toolType = ToolType.AXE;
+        typeOfItem = ToolType.AXE;
         attackValue = level;
     }
 }
