@@ -17,7 +17,7 @@ leftDownWater,true
 leftTopStone,false
 rightBottomStone,false
 rightUpWater,true
-wheatField,false
+brokenWheat,false
 grassWithFlowers,false
 leftTopWheatField,false
 leftUpWater,true
@@ -31,7 +31,7 @@ rightStone,false
 rightTopClay,false
 rightWheatField,false
 basicWater,true
-stone,false
+brokenStone,false
 topClay,false
 topStone,false
 topWater,true
@@ -40,6 +40,9 @@ bottomClay,false
 bottomStone,false
 bottomWater,true
 bottomWheatField,false
-clay,false
+brokenClay,false
 eWater1,true
 eWater2,true
+wallInHouse,true
+floor,false
+bed,true

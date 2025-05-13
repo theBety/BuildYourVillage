@@ -59,6 +59,9 @@ public class UI {
                 drawInventory();
                 drawInfoScreen();
                 break;
+            case SETTINGS:
+                drawSettingsScreen();
+                break;
         }
 
     }
@@ -193,7 +196,7 @@ public class UI {
             g2.setFont(bookMan.deriveFont(Font.BOLD, 35));
             text = "* PLAY";
             x = gp.screenWidth - gp.tileSize * 3;
-            y = gp.tileSize * (helpInt + 1);
+            y = gp.tileSize * helpInt;
             g2.drawString(text, x, y);
         } catch (IOException i) {
             System.err.println("IO Exception help");
@@ -274,6 +277,66 @@ public class UI {
         yForText += gp.tileSize;
         g2.drawString("Current tool: ", xFortext, yForText);
         g2.drawImage(gp.player.currentTool.down1, xFortext + (gp.tileSize * 3) + 10, yForText - gp.tileSize / 2, null);
+    }
+
+    public void drawSettingsScreen() {
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
+        int frameX = gp.tileSize * 6;
+        int frameY = gp.tileSize;
+        int frameWidth = gp.tileSize * 8;
+        int frameHeight = gp.tileSize * 10;
+        drawPopUpWindow(frameX, frameY, frameWidth, frameHeight);
+
+        String text = "SETTINGS";
+        int x = xForCenteredText(text);
+        int y = gp.tileSize * 2;
+        g2.drawString(text, x, y);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 25F));
+
+        y += gp.tileSize + gp.tileSize / 2;
+        x = frameX + gp.tileSize;
+        text = "Music";
+        g2.drawString(text, x, y);
+        if (commandNum == 0) {
+            g2.drawString("*", x - 20, y + 5);
+        }
+        y += gp.tileSize + gp.tileSize / 2;
+        text = "Sound Effects";
+        g2.drawString(text, x, y);
+        if (commandNum == 1) {
+            g2.drawString("*", x - 20, y + 5);
+        }
+        y += gp.tileSize + gp.tileSize / 2;
+        text = "Controls";
+        g2.drawString(text, x, y);
+        if (commandNum == 2) {
+            g2.drawString("*", x - 20, y + 5);
+        }
+        y += gp.tileSize + gp.tileSize / 2;
+        text = "End game";
+        g2.drawString(text, x, y);
+        if (commandNum == 3) {
+            g2.drawString("*", x - 20, y + 5);
+        }
+        y += gp.tileSize * 2;
+        text = "Back";
+        g2.drawString(text, x, y);
+        if (commandNum == 4) {
+            g2.drawString("*", x - 20, y + 5);
+        }
+
+        x = frameX + gp.tileSize * 5;
+        y = frameY + gp.tileSize * 2;
+        g2.drawRect(x, y, 120, 24); //120/11 = 10.9
+        int volumeWidth = (int) 10.9 * gp.soundMusic.volumeScale;
+        g2.fillRect(x, y, volumeWidth, 24);
+
+        y += gp.tileSize + gp.tileSize / 2;
+        g2.drawRect(x, y, 120, 24);
+        volumeWidth = (int) 10.9 * gp.soundEffects.volumeScale;
+        g2.fillRect(x, y, volumeWidth, 24);
     }
 
     /**

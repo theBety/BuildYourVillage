@@ -11,7 +11,7 @@ public class ObjPurpleHouse extends Entity {
 
         name = "purpleHouse";
         typeOfItem = ToolType.PLACED;
-        down1 = setUpImage("/objects/purpleHouse", gp.tileSize * 2, gp.tileSize);
+        down1 = setUpImage("/objects/purpleHouse", gp.tileSize * 2, gp.tileSize*2);
         collisionObject = true;
     }
 }

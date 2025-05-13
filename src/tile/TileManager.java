@@ -1,7 +1,6 @@
 package tile;
 
 import main.GamePanel;
-import main.PlacingSetter;
 import main.UtilityTool;
 
 import javax.imageio.ImageIO;
@@ -13,11 +12,11 @@ public class TileManager {
 
     GamePanel gp;
     public Tile[] tile;
-    public int mapTileNum[][];
+    public int mapTileNum[][][];
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[48]; //how many kinds of tiles
+        tile = new Tile[55]; //how many kinds of tiles
         getTileImage();
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         createMaps("/maps/worldMap2.csv");
@@ -38,6 +37,7 @@ public class TileManager {
                 String[] split = line.split(",");
                 setUpImage(count, split[0], Boolean.parseBoolean(split[1]));
                 count++;
+                System.out.println(count);
             }
         }catch(IOException i){
             System.out.println("ups");

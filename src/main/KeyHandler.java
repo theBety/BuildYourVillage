@@ -33,6 +33,8 @@ public class KeyHandler implements KeyListener {
             gameStateTutorial(code);
         } else if (gp.gameState.equals(GameState.CHARACTER)) {
             gameStateCharacter(code);
+        } else if (gp.gameState.equals(GameState.SETTINGS)) {
+            gameStateSettings(code);
         }
     }
 
@@ -65,6 +67,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_C) {
             gp.gameState = GameState.CHARACTER;
+        }
+        if (code == KeyEvent.VK_SHIFT) {
+            gp.gameState = GameState.SETTINGS;
         }
     }
 
@@ -100,6 +105,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_ENTER) {
             if (gp.ui.commandNum == 0) {
                 gp.gameState = GameState.PLAYING;
+                gp.playSound(0);
             }
             if (gp.ui.commandNum == 1) {
                 gp.gameState = GameState.TUTORIAL;
@@ -145,26 +151,80 @@ public class KeyHandler implements KeyListener {
             }
         }
         if (code == KeyEvent.VK_S) {
-            if(gp.ui.slotRow != 3){
+            if (gp.ui.slotRow != 3) {
                 gp.ui.slotRow++;
                 gp.playSoundEffect(1);
             }
         }
         if (code == KeyEvent.VK_A) {
-            if(gp.ui.slotCol != 0){
+            if (gp.ui.slotCol != 0) {
                 gp.ui.slotCol--;
                 gp.playSoundEffect(1);
             }
         }
         if (code == KeyEvent.VK_D) {
-            if(gp.ui.slotCol != 4){
+            if (gp.ui.slotCol != 4) {
                 gp.ui.slotCol++;
                 gp.playSoundEffect(1);
             }
         }
-        if(code == KeyEvent.VK_ENTER){
+        if (code == KeyEvent.VK_ENTER) {
             gp.player.selectItem();
         }
+    }
+
+    /**
+     * Based on code, something happens - communicates with keyboard.
+     *
+     * @param code code from keyboard.
+     */
+    public void gameStateSettings(int code) {
+        if (code == KeyEvent.VK_SHIFT) {
+            gp.gameState = GameState.PLAYING;
+        }
+
+        if (code == KeyEvent.VK_W) {
+            gp.ui.commandNum--;
+
+            if (gp.ui.commandNum < 0) {
+                gp.ui.commandNum = 4;
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            gp.ui.commandNum++;
+            if (gp.ui.commandNum > 4) {
+                gp.ui.commandNum = 0;
+            }
+        }
+        //Volume controls
+        if (code == KeyEvent.VK_D) {
+            if (gp.ui.commandNum == 0 && gp.soundMusic.volumeScale < 10) {
+                gp.soundMusic.volumeScale++;
+                gp.soundMusic.volume();
+            }
+            if (gp.ui.commandNum == 1 && gp.soundEffects.volumeScale < 10) {
+                gp.soundEffects.volumeScale++;
+            }
+        }
+        if (code == KeyEvent.VK_A) {
+            if (gp.ui.commandNum == 0 && gp.soundMusic.volumeScale > 0) {
+                gp.soundMusic.volumeScale--;
+                gp.soundMusic.volume();
+            }
+            if (gp.ui.commandNum == 1 && gp.soundEffects.volumeScale > 0) {
+                gp.soundEffects.volumeScale--;
+            }
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            if (gp.ui.commandNum == 2) {
+                gp.gameState = GameState.TUTORIAL;
+            }
+            if (gp.ui.commandNum == 3) {
+                System.exit(1);
+                System.out.println("Game ended successfully");
+            }
+        }
+
     }
 
     /**
