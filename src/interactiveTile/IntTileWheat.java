@@ -3,28 +3,29 @@ package interactiveTile;
 import entity.Entity;
 import main.GamePanel;
 import main.ToolType;
-import object.ObjLog;
+import object.ObjWheat;
 
-public class IntTileTree extends InteractiveTile{
+public class IntTileWheat extends InteractiveTile{
     GamePanel gp;
 
-    public IntTileTree(GamePanel gp, int col, int row) {
+    public IntTileWheat(GamePanel gp, int col, int row) {
         super(gp,col,row);
         this.gp = gp;
-        dropItem = new ObjLog(gp);
+
         this.worldX = gp.tileSize * col;
         this.worldY = gp.tileSize * row;
 
-        down1 = setUpImage("/InteractiveTiles/justTree", gp.tileSize, gp.tileSize);
+        down1 = setUpImage("/InteractiveTiles/wheatField", gp.tileSize, gp.tileSize);
         isDestructible = true;
         life = 4;
+        dropItem = new ObjWheat(gp);
     }
 
     public boolean isRequiredItem(Entity entity){
-        return entity.currentTool.typeOfItem == ToolType.AXE;
+        return entity.currentTool.typeOfItem == ToolType.HOE;
     }
 
     public void playSoundEffect(){
-        gp.playSoundEffect(2);
+        //pridat sound effect
     }
 }

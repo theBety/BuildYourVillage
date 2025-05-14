@@ -65,7 +65,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_T) {
             showDebug = !showDebug;
         }
-        if (code == KeyEvent.VK_C) {
+        if (code == KeyEvent.VK_E) {
             gp.gameState = GameState.CHARACTER;
         }
         if (code == KeyEvent.VK_SHIFT) {
@@ -141,7 +141,7 @@ public class KeyHandler implements KeyListener {
      * @param code code from keyboard.
      */
     public void gameStateCharacter(int code) {
-        if (code == KeyEvent.VK_C) {
+        if (code == KeyEvent.VK_E) {
             gp.gameState = GameState.PLAYING;
         }
         if (code == KeyEvent.VK_W) {
@@ -220,8 +220,8 @@ public class KeyHandler implements KeyListener {
                 gp.gameState = GameState.TUTORIAL;
             }
             if (gp.ui.commandNum == 3) {
-                System.exit(1);
                 System.out.println("Game ended successfully");
+                System.exit(1);
             }
         }
 

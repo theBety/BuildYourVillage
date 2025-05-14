@@ -18,8 +18,9 @@ public class TileManager {
         this.gp = gp;
         tile = new Tile[55]; //how many kinds of tiles
         getTileImage();
-        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
-        createMaps("/maps/worldMap2.csv");
+        mapTileNum = new int[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
+        createMaps("/maps/worldMap2.csv", 0);
+        createMaps("/maps/house.csv", 1);
     }
 
     /**
@@ -37,7 +38,6 @@ public class TileManager {
                 String[] split = line.split(",");
                 setUpImage(count, split[0], Boolean.parseBoolean(split[1]));
                 count++;
-                System.out.println(count);
             }
         }catch(IOException i){
             System.out.println("ups");
@@ -52,11 +52,11 @@ public class TileManager {
             tile[index].image = utilityTool.scaledImage(tile[index].image, gp.tileSize, gp.tileSize);
             tile[index].collision = collision;
         } catch (IOException e) {
-            throw new Error("Something's wrong");
+            throw new Error("Something's wrong in setUpImage");
         }
     }
 
-    public void createMaps(String path) {
+    public void createMaps(String path, int map) {
         try {
             InputStream is = getClass().getResourceAsStream(path);
             BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)));
@@ -67,8 +67,7 @@ public class TileManager {
                 while (col < gp.maxWorldCol) {
                     String[] numbers = text.split(",");
                     int num = Integer.parseInt(numbers[col]);
-
-                    mapTileNum[col][row] = num;
+                    mapTileNum[map][col][row] = num;
                     col++;
                 }
                 if (col == gp.maxWorldCol) {
@@ -79,7 +78,8 @@ public class TileManager {
             br.close();
 
         } catch (Exception e) {
-            System.out.println("Something's wrong");
+            System.out.println("Something's wrong in create maps method");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -89,7 +89,7 @@ public class TileManager {
 
         while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
 
-            int tileNum = mapTileNum[worldCol][worldRow];
+            int tileNum = mapTileNum[gp.currentMap][worldCol][worldRow];
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;
             int screenX = worldX - gp.player.worldX + gp.player.screenX;

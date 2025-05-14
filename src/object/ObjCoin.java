@@ -4,8 +4,11 @@ import entity.Entity;
 import main.GamePanel;
 import main.ToolType;
 
+import java.awt.*;
+
 public class ObjCoin extends Entity {
     GamePanel gp;
+
     public ObjCoin(GamePanel gp) {
         super(gp);
         this.gp = gp;
@@ -16,8 +19,16 @@ public class ObjCoin extends Entity {
         down1 = setUpImage("/objects/coin", gp.tileSize, gp.tileSize);
     }
 
-    public void useObject(Entity entity){
+    public void useObject(Entity entity) {
         gp.ui.addMessage("coin +" + value);
-        gp.player.coins+=3;
+        gp.player.coins += 3;
+    }
+
+    @Override
+    public void draw(Graphics2D g2) {
+        int screenX = worldX - gp.player.worldX + gp.player.screenX;
+        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+        image = down1;
+        g2.drawImage(image, screenX, screenY, gp.tileSize / 2, gp.tileSize / 2, null);
     }
 }

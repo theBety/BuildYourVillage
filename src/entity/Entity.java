@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public abstract class Entity {
-    GamePanel gp;
+    protected GamePanel gp;
     public int worldX;
     public int worldY;
     public int solidAreaDefaultX, solidAreaDefaultY;
@@ -88,10 +88,10 @@ public abstract class Entity {
     }
     public void dropItem(Entity droppedItem){
         for (int i = 0; i < gp.objects.length; i++) {
-            if(gp.objects[i] == null){
-                gp.objects[i] = droppedItem;
-                gp.objects[i].worldX = worldX;
-                gp.objects[i].worldY = worldY;
+            if(gp.objects[gp.currentMap][i] == null){
+                gp.objects[gp.currentMap][i] = droppedItem;
+                gp.objects[gp.currentMap][i].worldX = worldX;
+                gp.objects[gp.currentMap][i].worldY = worldY;
                 break;
             }
         }
@@ -196,7 +196,5 @@ public abstract class Entity {
             }
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
         }
-
-
     }
 }

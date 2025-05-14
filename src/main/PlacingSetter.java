@@ -3,7 +3,10 @@ package main;
 import entity.Npc;
 import entity.Villager;
 import entity.VillagerType;
+import interactiveTile.IntTileClay;
+import interactiveTile.IntTileStone;
 import interactiveTile.IntTileTree;
+import interactiveTile.IntTileWheat;
 import object.*;
 
 import java.io.*;
@@ -19,48 +22,52 @@ public class PlacingSetter {
     }
 
     public void setObject() {
-        gp.objects[counterInObject] = new ObjChest(gp);
-        gp.objects[counterInObject].worldX = 21 * gp.tileSize;
-        gp.objects[counterInObject].worldY = 20 * gp.tileSize;
+        int forMap = 0;
+
+        gp.objects[forMap][counterInObject] = new ObjChest(gp);
+        gp.objects[forMap][counterInObject].worldX = 21 * gp.tileSize;
+        gp.objects[forMap][counterInObject].worldY = 20 * gp.tileSize;
         counterInObject++;
 
-        gp.objects[counterInObject] = new ObjPurpleHouse(gp);
-        gp.objects[counterInObject].worldX = 22 * gp.tileSize;
-        gp.objects[counterInObject].worldY = 18 * gp.tileSize;
+        gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
+        gp.objects[forMap][counterInObject].worldX = 22 * gp.tileSize;
+        gp.objects[forMap][counterInObject].worldY = 18 * gp.tileSize;
         counterInObject++;
 
-        gp.objects[counterInObject] = new ObjKey(gp);
-        gp.objects[counterInObject].worldX = 23 * gp.tileSize;
-        gp.objects[counterInObject].worldY = 19 * gp.tileSize;
+        gp.objects[forMap][counterInObject] = new ObjKey(gp);
+        gp.objects[forMap][counterInObject].worldX = 28 * gp.tileSize;
+        gp.objects[forMap][counterInObject].worldY = 19 * gp.tileSize;
         counterInObject++;
 
-        gp.objects[counterInObject] = new ObjKey(gp);
-        gp.objects[counterInObject].worldX = 26 * gp.tileSize;
-        gp.objects[counterInObject].worldY = 17 * gp.tileSize;
+        gp.objects[forMap][counterInObject] = new ObjKey(gp);
+        gp.objects[forMap][counterInObject].worldX = 26 * gp.tileSize;
+        gp.objects[forMap][counterInObject].worldY = 17 * gp.tileSize;
         counterInObject++;
 
-        gp.objects[counterInObject] = new ObjCoin(gp);
-        gp.objects[counterInObject].worldX = 28 * gp.tileSize;
-        gp.objects[counterInObject].worldY = 19 * gp.tileSize;
+        gp.objects[forMap][counterInObject] = new ObjCoin(gp);
+        gp.objects[forMap][counterInObject].worldX = 30 * gp.tileSize;
+        gp.objects[forMap][counterInObject].worldY = 19 * gp.tileSize;
         counterInObject++;
     }
 
     public void setNpc() {
-        gp.npc[0] = new Npc(gp);
-        gp.npc[0].worldX = 22 * gp.tileSize;
-        gp.npc[0].worldY = 21 * gp.tileSize;
+        int forMap = 0;
 
-        gp.npc[1] = new Villager(gp, VillagerType.BUILDER);
-        gp.npc[1].worldX = 13 * gp.tileSize;
-        gp.npc[1].worldY = 24 * gp.tileSize;
+        gp.npc[forMap][0] = new Npc(gp);
+        gp.npc[forMap][0].worldX = 22 * gp.tileSize;
+        gp.npc[forMap][0].worldY = 21 * gp.tileSize;
 
-        gp.npc[2] = new Villager(gp, VillagerType.SMITH);
-        gp.npc[2].worldX = 28 * gp.tileSize;
-        gp.npc[2].worldY = 25 * gp.tileSize;
+        gp.npc[forMap][1] = new Villager(gp, VillagerType.BUILDER);
+        gp.npc[forMap][1].worldX = 13 * gp.tileSize;
+        gp.npc[forMap][1].worldY = 24 * gp.tileSize;
 
-        gp.npc[3] = new Villager(gp, VillagerType.WOOD);
-        gp.npc[3].worldX = 24 * gp.tileSize;
-        gp.npc[3].worldY = 32 * gp.tileSize;
+        gp.npc[forMap][2] = new Villager(gp, VillagerType.SMITH);
+        gp.npc[forMap][2].worldX = 28 * gp.tileSize;
+        gp.npc[forMap][2].worldY = 25 * gp.tileSize;
+
+        gp.npc[forMap][3] = new Villager(gp, VillagerType.WOOD);
+        gp.npc[forMap][3].worldX = 24 * gp.tileSize;
+        gp.npc[forMap][3].worldY = 32 * gp.tileSize;
     }
 
     /**
@@ -68,6 +75,8 @@ public class PlacingSetter {
      */
     public void setInteractiveTile() {
         try {
+            int forMap = 0;
+
             InputStream is = getClass().getResourceAsStream("/maps/worldMap2.csv");
             BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)));
             int col = 0;
@@ -79,7 +88,19 @@ public class PlacingSetter {
                     String[] numbers = text.split(",");
                     int num = Integer.parseInt(numbers[col]);
                     if (num == 5) {
-                        gp.iTile[counterInITile] = new IntTileTree(gp, col, row);
+                        gp.iTile[forMap][counterInITile] = new IntTileTree(gp, col, row);
+                        counterInITile++;
+                    }
+                    if (num == 19) {
+                        gp.iTile[forMap][counterInITile] = new IntTileWheat(gp, col, row);
+                        counterInITile++;
+                    }
+                    if (num == 35) {
+                        gp.iTile[forMap][counterInITile] = new IntTileStone(gp, col, row);
+                        counterInITile++;
+                    }
+                    if (num == 45) {
+                        gp.iTile[forMap][counterInITile] = new IntTileClay(gp, col, row);
                         counterInITile++;
                     }
                     col++;

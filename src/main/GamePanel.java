@@ -17,6 +17,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int tileSize = originalTileSize * scale;
     public final int maxScreenCol = 20;
     public final int maxScreenRow = 15;
+    public  int currentMap = 0;
+    public  final int maxMap = 10;
     public final int screenWidth = tileSize * maxScreenCol; //960
     public final int screenHeight = tileSize * maxScreenRow; //720
     int FPS = 60;
@@ -28,14 +30,14 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyH);
     public PlacingSetter plSetter = new PlacingSetter(this);
     public UI ui = new UI(this);
+    public EventManager eventManager = new EventManager(this);
     SoundManager soundMusic = new SoundManager();
     SoundManager soundEffects = new SoundManager();
 
-    public Entity[] objects = new Entity[10];
-    public Entity[] npc = new Entity[5];
-    public InteractiveTile[] iTile = new InteractiveTile[354];//357 trees
+    public Entity[][] objects = new Entity[maxMap][10];
+    public Entity[][] npc = new Entity[maxMap][5];
+    public InteractiveTile[][] iTile = new InteractiveTile[maxMap][500];
     ArrayList<Entity> entitiesAndObjects = new ArrayList<>();
-    //public EventManager eventManager = new EventManager(this);
 
     //World settings
     public final int maxWorldCol = 50;
@@ -99,19 +101,16 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameState.equals(GameState.PLAYING)) {
             player.update();
 
-            for (Entity entity : npc) {
+            for (Entity entity : npc[currentMap]) {
                 if (entity != null) {
                     entity.update();
                 }
             }
-            for (InteractiveTile interactiveTile : iTile) {
+            for (InteractiveTile interactiveTile : iTile[currentMap]) {
                 if (interactiveTile != null) {
                     interactiveTile.update();
                 }
             }
-        }
-        if (gameState.equals(GameState.PAUSED)) {
-
         }
     }
 
@@ -130,18 +129,18 @@ public class GamePanel extends JPanel implements Runnable {
             //Render order. Why didn't I use treeSet? I want to save duplicates, so I needed something else.
             tm.draw(g2);
 
-            for (InteractiveTile interactiveTile : iTile) {
+            for (InteractiveTile interactiveTile : iTile[currentMap]) {
                 if (interactiveTile != null) {
                     interactiveTile.draw(g2);
                 }
             }
             entitiesAndObjects.add(player);
-            for (Entity npc : npc) {
+            for (Entity npc : npc[currentMap]) {
                 if (npc != null) {
                     entitiesAndObjects.add(npc);
                 }
             }
-            for (Entity object : objects) {
+            for (Entity object : objects[currentMap]) {
                 if (object != null) {
                     entitiesAndObjects.add(object);
                 }

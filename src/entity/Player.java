@@ -37,6 +37,9 @@ public class Player extends Entity {
         worldX = gp.tileSize * 23; //Start position of a player. The number is tiles x,y. YOU CAN CHANGE THAT
         worldY = gp.tileSize * 21;
 
+        //worldX = gp.tileSize * 25;
+        //worldY = gp.tileSize * 25;
+
         speed = 4;
         direction = "down";
         coins = 0;
@@ -59,6 +62,7 @@ public class Player extends Entity {
         inventory.add(new ToolPicaxe(gp, 1));
         inventory.add(new ToolPicaxe(gp, 2));
         inventory.add(new ToolPicaxe(gp, 3));
+        inventory.add(new ToolHoe(gp, 2));
     }
 
     public int getAttack() {
@@ -93,7 +97,7 @@ public class Player extends Entity {
             left1Axe2 = setUpImage("/player/left1Axe2", gp.tileSize * 2, gp.tileSize);
             right1Axe1 = setUpImage("/player/right1Axe1", gp.tileSize * 2, gp.tileSize);
             right1Axe2 = setUpImage("/player/right1Axe2", gp.tileSize * 2, gp.tileSize);
-        } else {
+        } else if (currentTool.typeOfItem == ToolType.PICAXE){
             up1Axe1 = setUpImage("/player/back1Pic1", gp.tileSize * 2, gp.tileSize);
             up1Axe2 = setUpImage("/player/back1Pic2", gp.tileSize * 2, gp.tileSize);
             down1Axe1 = setUpImage("/player/front1Pic1", gp.tileSize * 2, gp.tileSize);
@@ -102,8 +106,16 @@ public class Player extends Entity {
             left1Axe2 = setUpImage("/player/left1Pic2", gp.tileSize * 2, gp.tileSize);
             right1Axe1 = setUpImage("/player/right1Pic1", gp.tileSize * 2, gp.tileSize);
             right1Axe2 = setUpImage("/player/right1Pic2", gp.tileSize * 2, gp.tileSize);
+        }else{
+            up1Axe1 = setUpImage("/player/back1Hoe1", gp.tileSize * 2, gp.tileSize);
+            up1Axe2 = setUpImage("/player/back1Hoe2", gp.tileSize * 2, gp.tileSize);
+            down1Axe1 = setUpImage("/player/front1Hoe1", gp.tileSize * 2, gp.tileSize);
+            down1Axe2 = setUpImage("/player/front1Hoe2", gp.tileSize * 2, gp.tileSize);
+            left1Axe1 = setUpImage("/player/left1Hoe1", gp.tileSize * 2, gp.tileSize);
+            left1Axe2 = setUpImage("/player/left1Hoe2", gp.tileSize * 2, gp.tileSize);
+            right1Axe1 = setUpImage("/player/right1Hoe1", gp.tileSize * 2, gp.tileSize);
+            right1Axe2 = setUpImage("/player/right1Hoe2", gp.tileSize * 2, gp.tileSize);
         }
-
     }
 
     /**
@@ -142,6 +154,8 @@ public class Player extends Entity {
             int npcIndex = gp.checkCollision.checkEntity(this, gp.npc);
             interactWithNpc(npcIndex);
 
+            gp.eventManager.checkEvent();
+
             gp.checkCollision.checkEntity(this, gp.iTile);
 
             gp.keyH.spacePressed = false;
@@ -176,16 +190,16 @@ public class Player extends Entity {
     public void pickUpObject(int index) {
         String text;
         if (index != -1) {
-            if (gp.objects[index].typeOfItem.equals(ToolType.PICKUP)) {
-                gp.objects[index].useObject(this);
-                gp.objects[index] = null;
+            if (gp.objects[gp.currentMap][index].typeOfItem.equals(ToolType.PICKUP)) {
+                gp.objects[gp.currentMap][index].useObject(this);
+                gp.objects[gp.currentMap][index] = null;
             } else {
-                if (inventory.size() != inventoryCapacity && !gp.objects[index].collisionObject) {
-                    inventory.add(gp.objects[index]);
+                if (inventory.size() != inventoryCapacity && !gp.objects[gp.currentMap][index].collisionObject) {
+                    inventory.add(gp.objects[gp.currentMap][index]);
                     //play sound effect
-                    text = "You picked up a " + gp.objects[index].name + "!";
+                    text = "You picked up a " + gp.objects[gp.currentMap][index].name + "!";
                     exp += 3;
-                    gp.objects[index] = null;
+                    gp.objects[gp.currentMap][index] = null;
                 } else {
                     text = "You can't carry more objects :(";
                 }
@@ -197,7 +211,7 @@ public class Player extends Entity {
     public void interactWithNpc(int i) {
         if (i != -1) {
             gp.gameState = GameState.DIALOGUE;
-            gp.npc[i].speak();
+            gp.npc[gp.currentMap][i].speak();
         } else {
             if (gp.keyH.spacePressed) {
                 attacking = true;
@@ -254,16 +268,16 @@ public class Player extends Entity {
     }
 
     public void damageInteractiveTile(int index) {
-        if (index != -1 && gp.iTile[index].isDestructible && gp.iTile[index].isRequiredItem(this)
-                && !gp.iTile[index].isInvincible) {
+        if (index != -1 && gp.iTile[gp.currentMap][index].isDestructible && gp.iTile[gp.currentMap][index].isRequiredItem(this)
+                && !gp.iTile[gp.currentMap][index].isInvincible) {
             exp++;
-            gp.iTile[index].playSoundEffect();
-            gp.iTile[index].life -= getAttack();
-            gp.iTile[index].isInvincible = true;
+            gp.iTile[gp.currentMap][index].playSoundEffect();
+            gp.iTile[gp.currentMap][index].life -= getAttack();
+            gp.iTile[gp.currentMap][index].isInvincible = true;
 
-            if (gp.iTile[index].life <= 0) {
-                gp.iTile[index] = null;
-                dropItem(new ObjLog(gp));
+            if (gp.iTile[gp.currentMap][index].life <= 0) {
+                dropItem(gp.iTile[gp.currentMap][index].dropItem);
+                gp.iTile[gp.currentMap][index] = null;
             }
         }
     }
@@ -276,7 +290,8 @@ public class Player extends Entity {
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.typeOfItem == ToolType.AXE || selectedItem.typeOfItem == ToolType.PICAXE) {
+            if (selectedItem.typeOfItem == ToolType.AXE || selectedItem.typeOfItem == ToolType.PICAXE
+                    || selectedItem.typeOfItem == ToolType.HOE) {
                 currentTool = selectedItem;
                 attack = getAttack();
                 getAttackImages();

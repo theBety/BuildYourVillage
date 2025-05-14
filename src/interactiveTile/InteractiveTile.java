@@ -6,6 +6,7 @@ import main.GamePanel;
 public class InteractiveTile extends Entity {
     GamePanel gp;
     public boolean isDestructible = false;
+    public Entity dropItem;
 
     public InteractiveTile(GamePanel gp, int col, int row) {
         super(gp);

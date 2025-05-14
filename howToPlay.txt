@@ -5,7 +5,7 @@ stone or wheat to build houses.
 Controls:
 W, S, A, D - moving
 N - End conversation with a NPC.
-C - Inventory
+E - Inventory
 R - Pause game
 SHIFT - Settings
 SPACE - Break

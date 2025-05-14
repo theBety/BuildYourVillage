@@ -6,14 +6,13 @@ import main.ToolType;
 
 import java.awt.*;
 
-public class ObjLog extends Entity {
-
-    public ObjLog(GamePanel gp) {
+public class ObjClay extends Entity {
+    public ObjClay(GamePanel gp) {
         super(gp);
-        down1 = setUpImage("/objects/Log", gp.tileSize/2, gp.tileSize/2);
-        name = "log";
+        down1 = setUpImage("/objects/Clay", gp.tileSize / 2, gp.tileSize / 2);
+        name = "clay";
         typeOfItem = ToolType.MATERIAL;
-        descriptionOfItem = "Log\nGive to builder to build floors!";
+        descriptionOfItem = "Clay\nGive to builder to build walls!";
     }
 
     @Override

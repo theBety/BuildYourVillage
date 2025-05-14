@@ -6,14 +6,14 @@ import main.ToolType;
 
 import java.awt.*;
 
-public class ObjLog extends Entity {
+public class ObjWheat extends Entity {
 
-    public ObjLog(GamePanel gp) {
+    public ObjWheat(GamePanel gp) {
         super(gp);
-        down1 = setUpImage("/objects/Log", gp.tileSize/2, gp.tileSize/2);
-        name = "log";
+        down1 = setUpImage("/objects/Wheat", gp.tileSize/2, gp.tileSize/2);
+        name = "wheat";
         typeOfItem = ToolType.MATERIAL;
-        descriptionOfItem = "Log\nGive to builder to build floors!";
+        descriptionOfItem = "Wheat\nGive to builder to build roof!";
     }
 
     @Override
