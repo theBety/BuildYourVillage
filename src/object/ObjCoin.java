@@ -16,12 +16,13 @@ public class ObjCoin extends Entity {
         typeOfItem = ToolType.PICKUP;
         name = "coin";
         value = 5;
-        down1 = setUpImage("/objects/coin", gp.tileSize, gp.tileSize);
+        down1 = setUpImage("/objects/coin", gp.tileSize/2, gp.tileSize/2);
+        descriptionOfItem = "Coin\nBuy items!";
     }
 
     public void useObject(Entity entity) {
         gp.ui.addMessage("coin +" + value);
-        gp.player.coins += 3;
+        gp.player.coins += value;
     }
 
     @Override

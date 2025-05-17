@@ -14,6 +14,7 @@ public class ObjWheat extends Entity {
         name = "wheat";
         typeOfItem = ToolType.MATERIAL;
         descriptionOfItem = "Wheat\nGive to builder to build roof!";
+        price = 2;
     }
 
     @Override

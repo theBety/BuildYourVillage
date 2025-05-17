@@ -1,6 +1,8 @@
 package entity;
 
 import main.GamePanel;
+import main.GameState;
+import object.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,6 +19,8 @@ public class Villager extends Entity {
         speed = 2;
         String typeOfVillager = utilityTool.firstLetterUppercase(type.toString());
         getVillagerImage(typeOfVillager);
+        setDialogue(typeOfVillager);
+        setitems(typeOfVillager);
         //makeTrades(typeOfVillager);
     }
 
@@ -32,7 +36,6 @@ public class Villager extends Entity {
         right2 = setUpImage("/NPC/right2" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
     }
 
-    //idk jestli funguje
     public void makeTrades(String typeOfVillager) {
         int wantedNumberOnCounter = -1;
         wantedNumberOnCounter = switch (typeOfVillager) {
@@ -65,25 +68,65 @@ public class Villager extends Entity {
 
     public void setDialogue(String typeOfVillager) {
         switch (typeOfVillager) {
-            case "Wood" -> dialogues[0] = "Wood\n";
-            case "Builder" -> dialogues[0] = "Builder\n";
-            case "Smith" -> dialogues[0] = "Smith\n";
+            case "Seller" ->
+                    dialogues[0] = "Hi! I'm your new best friend!\nI can sell you any material\nyou could need!";
+            case "Builder" ->
+                    dialogues[0] = "If you have all the materials,\ncome to me and we can build\nthis village together!";
+            case "Smith" -> dialogues[0] = "Mining takes long time doesn't it?\n Well i can help you with that!";
         }
     }
 
     public void speak() {
         super.speak();
+        gp.gameState = GameState.TRADING;
+        gp.ui.villager = this;
     }
 
-    public void action(){
+    public void action() {
         counterForEntityMovement++;
 
-        if(counterForEntityMovement == 90){
+        if (counterForEntityMovement == 90) {
             Random rd = new Random();
             int index = rd.nextInt(4);
             Directions directionFromEnum = Directions.values()[index];
             direction = directionFromEnum.toString().toLowerCase();
             counterForEntityMovement = 0;
+        }
+    }
+
+    public void setitems(String typeOfVillager) {
+        switch (typeOfVillager) {
+            case "Seller": {
+                inventory.clear();
+                inventory.add(new ObjWheat(gp));
+                inventory.add(new ObjClay(gp));
+                inventory.add(new ObjStone(gp));
+                inventory.add(new ObjLog(gp));
+                inventory.add(new ObjCoin(gp));
+                break;
+            }
+            case "Builder": {
+                inventory.clear();
+                inventory.add(new ObjWheat(gp));
+                inventory.add(new ObjClay(gp));
+                inventory.add(new ObjStone(gp));
+                inventory.add(new ObjLog(gp));
+                break;
+            }
+            case "Smith": {
+                inventory.clear();
+                inventory.add(new ToolPicaxe(gp, 1));
+                inventory.add(new ToolPicaxe(gp, 2));
+                inventory.add(new ToolPicaxe(gp, 3));
+
+                inventory.add(new ToolHoe(gp, 1));
+                inventory.add(new ToolHoe(gp, 2));
+                inventory.add(new ToolHoe(gp, 3));
+
+                inventory.add(new ToolAxe(gp, 1));
+                inventory.add(new ToolAxe(gp, 2));
+                inventory.add(new ToolAxe(gp, 3));
+            }
         }
     }
 }

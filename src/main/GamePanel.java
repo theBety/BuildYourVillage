@@ -17,8 +17,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int tileSize = originalTileSize * scale;
     public final int maxScreenCol = 20;
     public final int maxScreenRow = 15;
-    public  int currentMap = 0;
-    public  final int maxMap = 10;
+    public int currentMap = 0;
+    public final int maxMap = 10;
     public final int screenWidth = tileSize * maxScreenCol; //960
     public final int screenHeight = tileSize * maxScreenRow; //720
     int FPS = 60;
@@ -35,7 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
     SoundManager soundEffects = new SoundManager();
 
     public Entity[][] objects = new Entity[maxMap][10];
-    public Entity[][] npc = new Entity[maxMap][5];
+    public Entity[][] npc = new Entity[maxMap][10];
     public InteractiveTile[][] iTile = new InteractiveTile[maxMap][500];
     ArrayList<Entity> entitiesAndObjects = new ArrayList<>();
 
@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        //this.playSound(0);
     }
 
     /**

@@ -13,6 +13,7 @@ public class ObjClay extends Entity {
         name = "clay";
         typeOfItem = ToolType.MATERIAL;
         descriptionOfItem = "Clay\nGive to builder to build walls!";
+        price = 2;
     }
 
     @Override

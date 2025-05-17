@@ -8,15 +8,10 @@ import object.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Player extends Entity {
     KeyHandler keyH;
     public final int screenX, screenY;
-    public ArrayList<Entity> inventory = new ArrayList<>();
-    final int inventoryCapacity = 20;
-    public HashMap<Integer, Integer> levelAndNextLevel = new HashMap<>();
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -34,21 +29,18 @@ public class Player extends Entity {
     }
 
     public void setValues() {
-        worldX = gp.tileSize * 23; //Start position of a player. The number is tiles x,y. YOU CAN CHANGE THAT
+        worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
-
-        //worldX = gp.tileSize * 25;
-        //worldY = gp.tileSize * 25;
 
         speed = 4;
         direction = "down";
-        coins = 0;
+        coins = 50;
         currentTool = new ToolAxe(gp, 3);
         strength = 1;
         attack = getAttack();
         level = 1;
         exp = 0;
-        expToNextLevel = 20;
+        expToNextLevel = 40;
         //currentBoots = new boty;
     }
 
@@ -97,7 +89,7 @@ public class Player extends Entity {
             left1Axe2 = setUpImage("/player/left1Axe2", gp.tileSize * 2, gp.tileSize);
             right1Axe1 = setUpImage("/player/right1Axe1", gp.tileSize * 2, gp.tileSize);
             right1Axe2 = setUpImage("/player/right1Axe2", gp.tileSize * 2, gp.tileSize);
-        } else if (currentTool.typeOfItem == ToolType.PICAXE){
+        } else if (currentTool.typeOfItem == ToolType.PICAXE) {
             up1Axe1 = setUpImage("/player/back1Pic1", gp.tileSize * 2, gp.tileSize);
             up1Axe2 = setUpImage("/player/back1Pic2", gp.tileSize * 2, gp.tileSize);
             down1Axe1 = setUpImage("/player/front1Pic1", gp.tileSize * 2, gp.tileSize);
@@ -106,7 +98,7 @@ public class Player extends Entity {
             left1Axe2 = setUpImage("/player/left1Pic2", gp.tileSize * 2, gp.tileSize);
             right1Axe1 = setUpImage("/player/right1Pic1", gp.tileSize * 2, gp.tileSize);
             right1Axe2 = setUpImage("/player/right1Pic2", gp.tileSize * 2, gp.tileSize);
-        }else{
+        } else {
             up1Axe1 = setUpImage("/player/back1Hoe1", gp.tileSize * 2, gp.tileSize);
             up1Axe2 = setUpImage("/player/back1Hoe2", gp.tileSize * 2, gp.tileSize);
             down1Axe1 = setUpImage("/player/front1Hoe1", gp.tileSize * 2, gp.tileSize);
@@ -200,6 +192,8 @@ public class Player extends Entity {
                     text = "You picked up a " + gp.objects[gp.currentMap][index].name + "!";
                     exp += 3;
                     gp.objects[gp.currentMap][index] = null;
+                } else if (gp.objects[gp.currentMap][index].collisionObject) {
+                    text = null;
                 } else {
                     text = "You can't carry more objects :(";
                 }
@@ -286,7 +280,7 @@ public class Player extends Entity {
      * Can set the current tool to a different tool. Player can switch tools.
      */
     public void selectItem() {
-        int itemIndex = gp.ui.getItemIndexInInventory();
+        int itemIndex = gp.ui.getItemIndexInInventory(gp.ui.slotColPlayer, gp.ui.slotRowPlayer);
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
 

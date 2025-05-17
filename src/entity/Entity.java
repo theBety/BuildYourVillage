@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class Entity {
@@ -47,6 +48,8 @@ public abstract class Entity {
     public int exp;
     public int expToNextLevel;
     public int value;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int inventoryCapacity = 20;
 
 
     //Item attributes
@@ -55,6 +58,7 @@ public abstract class Entity {
     public boolean collisionObject = false;
     public String descriptionOfItem = "";
     public ToolType typeOfItem;
+    public int price;
 
     public Entity(GamePanel gp) {
         this.gp = gp;

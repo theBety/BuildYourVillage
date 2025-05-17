@@ -14,6 +14,7 @@ public class ObjStone extends Entity{
         name = "stone";
         typeOfItem = ToolType.MATERIAL;
         descriptionOfItem = "Stone\nGive to builder to build walls!";
+        price = 3;
     }
 
     @Override

@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, rightPressed, leftPressed, spacePressed;
+    public boolean upPressed, downPressed, rightPressed, leftPressed, spacePressed, enterPressed;
     public GamePanel gp;
     boolean showDebug = false;
 
@@ -35,6 +35,8 @@ public class KeyHandler implements KeyListener {
             gameStateCharacter(code);
         } else if (gp.gameState.equals(GameState.SETTINGS)) {
             gameStateSettings(code);
+        } else if (gp.gameState.equals(GameState.TRADING)) {
+            gameStateTrading(code);
         }
     }
 
@@ -55,6 +57,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_D) {
             rightPressed = true;
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = true;
         }
         if (code == KeyEvent.VK_R) {
             gp.gameState = GameState.PAUSED;
@@ -105,7 +110,6 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_ENTER) {
             if (gp.ui.commandNum == 0) {
                 gp.gameState = GameState.PLAYING;
-                gp.playSound(0);
             }
             if (gp.ui.commandNum == 1) {
                 gp.gameState = GameState.TUTORIAL;
@@ -144,33 +148,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_E) {
             gp.gameState = GameState.PLAYING;
         }
-        if (code == KeyEvent.VK_W) {
-            if (gp.ui.slotRow != 0) {
-                gp.ui.slotRow--;
-                gp.playSoundEffect(1);
-            }
-        }
-        if (code == KeyEvent.VK_S) {
-            if (gp.ui.slotRow != 3) {
-                gp.ui.slotRow++;
-                gp.playSoundEffect(1);
-            }
-        }
-        if (code == KeyEvent.VK_A) {
-            if (gp.ui.slotCol != 0) {
-                gp.ui.slotCol--;
-                gp.playSoundEffect(1);
-            }
-        }
-        if (code == KeyEvent.VK_D) {
-            if (gp.ui.slotCol != 4) {
-                gp.ui.slotCol++;
-                gp.playSoundEffect(1);
-            }
-        }
-        if (code == KeyEvent.VK_ENTER) {
-            gp.player.selectItem();
-        }
+        playerInventory(code);
     }
 
     /**
@@ -182,7 +160,6 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_SHIFT) {
             gp.gameState = GameState.PLAYING;
         }
-
         if (code == KeyEvent.VK_W) {
             gp.ui.commandNum--;
 
@@ -227,6 +204,114 @@ public class KeyHandler implements KeyListener {
 
     }
 
+    public void gameStateTrading(int code) {
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = true;}
+
+        if (gp.ui.tradingState == 0) {
+            if (code == KeyEvent.VK_W) {
+                gp.ui.commandNum--;
+
+                if (gp.ui.commandNum < 0) {
+                    gp.ui.commandNum = 2;
+                }
+            }
+            if (code == KeyEvent.VK_S) {
+                gp.ui.commandNum++;
+                if (gp.ui.commandNum > 2) {
+                    gp.ui.commandNum = 0;
+                }
+            }
+        }
+        if (gp.ui.tradingState == 1) {
+            villagerInventory(code);
+            if (code == KeyEvent.VK_ESCAPE) {
+                    gp.ui.tradingState = 0;
+            }
+        }
+            /*if (gp.ui.commandNum == 0) {
+                gp.ui.tradingState = 1;
+
+            }
+            if (gp.ui.tradingState == 1) {
+                //gp.ui.buy();
+            }
+            if (gp.ui.commandNum == 2) {
+                gp.gameState = GameState.PLAYING;
+            }
+            if (gp.ui.commandNum == 1) {
+                gp.ui.tradingState = 2;
+            }*/
+        if (gp.ui.tradingState == 2) {
+            playerInventory(code);
+        }
+    }
+
+    /**
+     * Controls of inventory
+     *
+     * @param code code from keyboard.
+     */
+    public void playerInventory(int code) {
+        if (code == KeyEvent.VK_W) {
+            if (gp.ui.slotRowPlayer != 0) {
+                gp.ui.slotRowPlayer--;
+                gp.playSoundEffect(1);
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            if (gp.ui.slotRowPlayer != 3) {
+                gp.ui.slotRowPlayer++;
+                gp.playSoundEffect(1);
+            }
+        }
+        if (code == KeyEvent.VK_A) {
+            if (gp.ui.slotColPlayer != 0) {
+                gp.ui.slotColPlayer--;
+                gp.playSoundEffect(1);
+            }
+        }
+        if (code == KeyEvent.VK_D) {
+            if (gp.ui.slotColPlayer != 4) {
+                gp.ui.slotColPlayer++;
+                gp.playSoundEffect(1);
+            }
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            gp.player.selectItem();
+        }
+    }
+
+    public void villagerInventory(int code) {
+        if (code == KeyEvent.VK_W) {
+            if (gp.ui.slotRowVil != 0) {
+                gp.ui.slotRowVil--;
+                gp.playSoundEffect(1);
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            if (gp.ui.slotRowVil != 3) {
+                gp.ui.slotRowVil++;
+                gp.playSoundEffect(1);
+            }
+        }
+        if (code == KeyEvent.VK_A) {
+            if (gp.ui.slotColVil != 0) {
+                gp.ui.slotColVil--;
+                gp.playSoundEffect(1);
+            }
+        }
+        if (code == KeyEvent.VK_D) {
+            if (gp.ui.slotColVil != 4) {
+                gp.ui.slotColVil++;
+                gp.playSoundEffect(1);
+            }
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            gp.player.selectItem();
+        }
+    }
+
     /**
      * Manages keys when they're released.
      *
@@ -247,5 +332,8 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) {
             rightPressed = false;
         }
+        /*if (code == KeyEvent.VK_ENTER) {
+            enterPressed = false;
+        }*/
     }
 }

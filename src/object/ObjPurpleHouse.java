@@ -15,7 +15,7 @@ public class ObjPurpleHouse extends Entity {
         typeOfItem = ToolType.PLACED;
         down1 = setUpImage("/objects/purpleHouse", gp.tileSize * 2, gp.tileSize*2);
         collisionObject = true;
-        solidArea = new Rectangle(solidAreaDefaultX,solidAreaDefaultY, gp.tileSize*2, gp.tileSize*2);
+        solidArea = new Rectangle(solidAreaDefaultX,solidAreaDefaultY, gp.tileSize*3, gp.tileSize*2);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ObjPurpleHouse extends Entity {
                     if (spriteNumber == 2) image = right2;
                     break;
             }
-            g2.drawImage(image, screenX, screenY, gp.tileSize*2, gp.tileSize*2, null);
+            g2.drawImage(image, screenX, screenY, gp.tileSize*3, gp.tileSize*3, null);
         }
     }
 }

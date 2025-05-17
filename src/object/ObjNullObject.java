@@ -6,15 +6,12 @@ import main.ToolType;
 
 import java.awt.*;
 
-public class ObjLog extends Entity {
-
-    public ObjLog(GamePanel gp) {
+public class ObjNullObject extends Entity {
+    public ObjNullObject(GamePanel gp) {
         super(gp);
-        down1 = setUpImage("/objects/Log", gp.tileSize/2, gp.tileSize/2);
         name = "log";
-        typeOfItem = ToolType.MATERIAL;
-        descriptionOfItem = "Log\nGive to builder to build floors!";
-        price = 2;
+        typeOfItem = ToolType.ELSE;
+        price = 0;
     }
 
     @Override

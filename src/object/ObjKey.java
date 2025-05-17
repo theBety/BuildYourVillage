@@ -13,6 +13,7 @@ public class ObjKey extends Entity {
         typeOfItem = ToolType.MATERIAL;
         down1 = setUpImage("/objects/key", gp.tileSize, gp.tileSize);
         descriptionOfItem = "Name: Key.\nFor opening doors or chests.\nDon't lose it!";
+        price = 150;
 
     }
 

@@ -24,11 +24,6 @@ public class PlacingSetter {
     public void setObject() {
         int forMap = 0;
 
-        gp.objects[forMap][counterInObject] = new ObjChest(gp);
-        gp.objects[forMap][counterInObject].worldX = 21 * gp.tileSize;
-        gp.objects[forMap][counterInObject].worldY = 20 * gp.tileSize;
-        counterInObject++;
-
         gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
         gp.objects[forMap][counterInObject].worldX = 22 * gp.tileSize;
         gp.objects[forMap][counterInObject].worldY = 18 * gp.tileSize;
@@ -45,29 +40,55 @@ public class PlacingSetter {
         counterInObject++;
 
         gp.objects[forMap][counterInObject] = new ObjCoin(gp);
-        gp.objects[forMap][counterInObject].worldX = 30 * gp.tileSize;
-        gp.objects[forMap][counterInObject].worldY = 19 * gp.tileSize;
+        gp.objects[forMap][counterInObject].worldX = 21 * gp.tileSize;
+        gp.objects[forMap][counterInObject].worldY = 25 * gp.tileSize;
+        counterInObject++;
+
+        forMap = 1;
+        gp.objects[forMap][counterInObject] = new ObjChest(gp);
+        gp.objects[forMap][counterInObject].worldX = 23 * gp.tileSize;
+        gp.objects[forMap][counterInObject].worldY = 22 * gp.tileSize;
         counterInObject++;
     }
 
     public void setNpc() {
         int forMap = 0;
+        int counter = 0;
 
-        gp.npc[forMap][0] = new Npc(gp);
-        gp.npc[forMap][0].worldX = 22 * gp.tileSize;
-        gp.npc[forMap][0].worldY = 21 * gp.tileSize;
+        gp.npc[forMap][counter] = new Npc(gp);
+        gp.npc[forMap][counter].worldX = 22 * gp.tileSize;
+        gp.npc[forMap][counter].worldY = 21 * gp.tileSize;
+        counter++;
+        gp.npc[forMap][counter] = new Villager(gp, VillagerType.BUILDER);
+        gp.npc[forMap][counter].worldX = 13 * gp.tileSize;
+        gp.npc[forMap][counter].worldY = 24 * gp.tileSize;
+        counter++;
+        gp.npc[forMap][counter] = new Villager(gp, VillagerType.SMITH);
+        gp.npc[forMap][counter].worldX = 28 * gp.tileSize;
+        gp.npc[forMap][counter].worldY = 25 * gp.tileSize;
+        counter++;
+        gp.npc[forMap][counter] = new Villager(gp, VillagerType.SELLER);
+        gp.npc[forMap][counter].worldX = 24 * gp.tileSize;
+        gp.npc[forMap][counter].worldY = 32 * gp.tileSize;
+        counter++;
+        gp.npc[forMap][counter] = new Villager(gp, VillagerType.BUILDER);
+        gp.npc[forMap][counter].worldX = 14 * gp.tileSize;
+        gp.npc[forMap][counter].worldY = 24 * gp.tileSize;
+        counter++;
+        gp.npc[forMap][counter] = new Villager(gp, VillagerType.SMITH);
+        gp.npc[forMap][counter].worldX = 29 * gp.tileSize;
+        gp.npc[forMap][counter].worldY = 25 * gp.tileSize;
+        counter++;
+        gp.npc[forMap][counter] = new Villager(gp, VillagerType.SELLER);
+        gp.npc[forMap][counter].worldX = 25 * gp.tileSize;
+        gp.npc[forMap][counter].worldY = 32 * gp.tileSize;
+        counter++;
 
-        gp.npc[forMap][1] = new Villager(gp, VillagerType.BUILDER);
-        gp.npc[forMap][1].worldX = 13 * gp.tileSize;
-        gp.npc[forMap][1].worldY = 24 * gp.tileSize;
-
-        gp.npc[forMap][2] = new Villager(gp, VillagerType.SMITH);
-        gp.npc[forMap][2].worldX = 28 * gp.tileSize;
-        gp.npc[forMap][2].worldY = 25 * gp.tileSize;
-
-        gp.npc[forMap][3] = new Villager(gp, VillagerType.WOOD);
-        gp.npc[forMap][3].worldX = 24 * gp.tileSize;
-        gp.npc[forMap][3].worldY = 32 * gp.tileSize;
+        forMap = 1;
+        gp.npc[forMap][counter] = new Npc(gp);
+        gp.npc[forMap][counter].worldX = 24 * gp.tileSize;
+        gp.npc[forMap][counter].worldY = 25 * gp.tileSize;
+        counter++;
     }
 
     /**

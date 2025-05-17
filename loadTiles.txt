@@ -46,3 +46,5 @@ eWater2,true
 wallInHouse,true
 floor,false
 bed,true
+door,false
+grassPath, false
