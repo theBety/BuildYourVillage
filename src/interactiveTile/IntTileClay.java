@@ -2,7 +2,7 @@ package interactiveTile;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 import object.ObjClay;
 
 public class IntTileClay extends InteractiveTile{
@@ -22,7 +22,7 @@ public class IntTileClay extends InteractiveTile{
     }
 
     public boolean isRequiredItem(Entity entity){
-        return entity.currentTool.typeOfItem == ToolType.PICAXE;
+        return entity.currentTool.typeOfItem == ItemType.PICAXE;
     }
 
     public void playSoundEffect(){

@@ -1,1 +1,0 @@
-PRICE:OBJECT (its name)

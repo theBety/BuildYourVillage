@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, rightPressed, leftPressed, spacePressed, enterPressed;
+    public boolean upPressed, downPressed, rightPressed, leftPressed, spacePressed, enterPressed, cPressed;
     public GamePanel gp;
     boolean showDebug = false;
 
@@ -59,7 +59,7 @@ public class KeyHandler implements KeyListener {
             rightPressed = true;
         }
         if (code == KeyEvent.VK_ENTER) {
-            enterPressed = true;
+            enterPressed = !enterPressed;
         }
         if (code == KeyEvent.VK_R) {
             gp.gameState = GameState.PAUSED;
@@ -84,8 +84,11 @@ public class KeyHandler implements KeyListener {
      * @param code code from keyboard.
      */
     public void gameStateDialogue(int code) {
-        if (code == KeyEvent.VK_N) {
+        if (code == KeyEvent.VK_ESCAPE) {
             gp.gameState = GameState.PLAYING;
+        }
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = !enterPressed;
         }
     }
 
@@ -114,6 +117,7 @@ public class KeyHandler implements KeyListener {
             if (gp.ui.commandNum == 1) {
                 gp.gameState = GameState.TUTORIAL;
             }
+            enterPressed = false;
         }
     }
 
@@ -206,8 +210,11 @@ public class KeyHandler implements KeyListener {
 
     public void gameStateTrading(int code) {
         if (code == KeyEvent.VK_ENTER) {
-            enterPressed = true;}
-
+            enterPressed = true;
+        }
+        if (code == KeyEvent.VK_C) {
+            cPressed = true;
+        }
         if (gp.ui.tradingState == 0) {
             if (code == KeyEvent.VK_W) {
                 gp.ui.commandNum--;
@@ -226,24 +233,14 @@ public class KeyHandler implements KeyListener {
         if (gp.ui.tradingState == 1) {
             villagerInventory(code);
             if (code == KeyEvent.VK_ESCAPE) {
-                    gp.ui.tradingState = 0;
+                gp.ui.tradingState = 0;
             }
         }
-            /*if (gp.ui.commandNum == 0) {
-                gp.ui.tradingState = 1;
-
-            }
-            if (gp.ui.tradingState == 1) {
-                //gp.ui.buy();
-            }
-            if (gp.ui.commandNum == 2) {
-                gp.gameState = GameState.PLAYING;
-            }
-            if (gp.ui.commandNum == 1) {
-                gp.ui.tradingState = 2;
-            }*/
         if (gp.ui.tradingState == 2) {
             playerInventory(code);
+            if (code == KeyEvent.VK_ESCAPE) {
+                gp.ui.tradingState = 0;
+            }
         }
     }
 
@@ -332,8 +329,5 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D) {
             rightPressed = false;
         }
-        /*if (code == KeyEvent.VK_ENTER) {
-            enterPressed = false;
-        }*/
     }
 }

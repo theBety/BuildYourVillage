@@ -1,6 +1,7 @@
 package main;
 
 import entity.Entity;
+import entity.VillagerType;
 import object.ObjCoin;
 
 import java.awt.*;
@@ -273,6 +274,7 @@ public class UI {
                     textY += gp.tileSize / 2;
                 }
             }
+            g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
         }
 
         for (int i = 0; i < entity.inventory.size(); i++) {
@@ -281,6 +283,23 @@ public class UI {
                 g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
             }
             g2.drawImage(entity.inventory.get(i).down1, slotX, slotY, null);
+
+            //display amount of item
+            if (entity == gp.player && entity.inventory.get(i).howManyOfItem > 1) {
+
+                g2.setFont(g2.getFont().deriveFont(30F));
+                int howManyX;
+                int howManyY;
+                String howManyString = Integer.toString(entity.inventory.get(i).howManyOfItem);
+                howManyX = slotX + 35;
+                howManyY = slotY + gp.tileSize;
+                g2.setColor(new Color(245, 188, 193));
+                g2.drawString(howManyString, howManyX, howManyY);
+                g2.setColor(new Color(63, 10, 41));
+                g2.drawString(howManyString, howManyX - 3, howManyY - 3);
+                g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
+            }
+
             slotX += gp.tileSize;
             if (i == 4 || i == 9 || i == 14) {
                 slotY += gp.tileSize;
@@ -402,31 +421,35 @@ public class UI {
         g2.drawString("Buy", x, y);
         if (commandNum == 0) {
             g2.drawString("*", x - 20, y + 5);
-            if(gp.keyH.enterPressed){
+            if (gp.keyH.enterPressed) {
                 tradingState = 1;
+                gp.keyH.enterPressed = false;
             }
         }
         y += gp.tileSize;
         g2.drawString("Sell", x, y);
         if (commandNum == 1) {
             g2.drawString("*", x - 20, y + 5);
-            if(gp.keyH.enterPressed){
+            if (gp.keyH.enterPressed) {
                 tradingState = 2;
+                gp.keyH.enterPressed = false;
             }
         }
         y += gp.tileSize;
         g2.drawString("Back", x, y);
         if (commandNum == 2) {
             g2.drawString("*", x - 20, y + 5);
-            if(gp.keyH.enterPressed){
+            if (gp.keyH.enterPressed) {
                 gp.gameState = GameState.PLAYING;
                 commandNum = 0;
                 currentDialogue = "See you nex time!";
+                gp.keyH.enterPressed = false;
             }
         }
     }
 
     public void tradeBuy() {
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
         drawInventory(gp.player, false);
         drawInventory(villager, true);
 
@@ -445,35 +468,38 @@ public class UI {
         //draw a price window
         int indexItem = getItemIndexInInventory(slotColVil, slotRowVil);
         if (indexItem < villager.inventory.size()) {
+
             x = (int) (gp.tileSize * 6.5);
             y = (int) (gp.tileSize * 5.5);
             width = (int) (gp.tileSize * 2.5);
             height = (int) (gp.tileSize * 1.5);
             drawPopUpWindow(x, y, width, height);
             g2.drawImage(coin, x + 10, y + 16, 32, 32, null);
-            String price = String.valueOf(villager.inventory.get(indexItem).price);
-            x+= gp.tileSize;
-            g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
-            g2.drawString(price, x, y+(gp.tileSize-5));
 
-            if (gp.keyH.enterPressed){
-                if(villager.inventory.get(indexItem) != null){
-                    if(villager.inventory.get(indexItem).price > gp.player.coins){
+            String price = String.valueOf(villager.inventory.get(indexItem).price);
+            x += gp.tileSize;
+            g2.drawString(price, x, y + (gp.tileSize - 5));
+
+            if (gp.keyH.enterPressed) {
+                if (villager.inventory.get(indexItem) != null) {
+                    if (villager.inventory.get(indexItem).price > gp.player.coins) {
                         tradingState = 0;
                         commandNum = 0;
                         gp.gameState = GameState.DIALOGUE;
                         currentDialogue = "You don't have enough money";
                         drawDialogueScreen();
-                    }else if(gp.player.inventory.size() == gp.player.inventoryCapacity){
-                        tradingState = 0;
-                        commandNum = 0;
-                        gp.gameState = GameState.DIALOGUE;
-                        currentDialogue = "You don't have enough room in\nyour inventory";
-                    }else{
-                        gp.player.coins -= villager.inventory.get(indexItem).price;
-                        gp.player.inventory.add(villager.inventory.get(indexItem));
+                    } else {
+                        if (gp.player.canStackItem(villager.inventory.get(indexItem))) {
+                            g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
+                            gp.player.coins -= villager.inventory.get(indexItem).price;
+                        } else {
+                            tradingState = 0;
+                            commandNum = 0;
+                            gp.gameState = GameState.DIALOGUE;
+                            currentDialogue = "You don't have enough room in\nyour inventory";
+                        }
                     }
-                }else{
+                } else {
                     tradingState = 0;
                     commandNum = 0;
                     gp.gameState = GameState.DIALOGUE;
@@ -486,6 +512,7 @@ public class UI {
 
     public void tradeSell() {
         drawInventory(gp.player, true);
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
         int x;
         int y;
         int width;
@@ -497,43 +524,73 @@ public class UI {
         width = gp.tileSize * 6;
         height = gp.tileSize * 2;
         drawPopUpWindow(x, y, width, height);
-        g2.drawString("[ESC] -> back", x + 24, y + 20);
+        g2.drawString("[ESC] -> back", x + 24, y + 25);
         g2.drawString("[C] -> sell", x + 24, y + 60);
-
         x = gp.tileSize * 12;
         drawPopUpWindow(x, y, width, height);
         g2.drawString("Coins: " + gp.player.coins, x + 24, y + 60);
 
-        //draw a price window
-        int indexItem = getItemIndexInInventory(slotColPlayer, slotRowPlayer);
-        if (indexItem < gp.player.inventory.size()) {
-            x = (int) (gp.tileSize * 16.5);
-            y = (int) (gp.tileSize * 5.5);
-            width = (int) (gp.tileSize * 2.5);
-            height = (int) (gp.tileSize * 1.5);
-            drawPopUpWindow(x, y, width, height);
-            g2.drawImage(coin, x + 10, y + 16, 32, 32, null);
-            String price = String.valueOf(gp.player.inventory.get(indexItem).price);
-            x+= gp.tileSize;
-            g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
-            g2.drawString(price, x, y+(gp.tileSize-15));
-        }
-
-        if(gp.keyH.enterPressed){
-            if(gp.player.inventory.get(indexItem) != null){
-                if(gp.player.inventory.get(indexItem) == gp.player.currentTool){
-                    commandNum = 0;
-                    tradingState = 0;
-                    gp.gameState = GameState.DIALOGUE;
-                    currentDialogue = "You can't sell your current\nweapon";
-                }else{
-                    gp.player.coins += gp.player.inventory.get(indexItem).price;
-                    gp.player.inventory.remove(indexItem);
-                }
-            }
-            gp.keyH.enterPressed = false;
+        if(villager.typeOfVillager.equals(VillagerType.BUILDER)){
+            builderSell();
+        }else{
+            normalSell();
         }
     }
+
+    public void normalSell(){
+        //draw a price window
+        int indexItem = getItemIndexInInventory(slotColPlayer, slotRowPlayer);
+
+        int sellingPrice = 0;
+        if (indexItem < gp.player.inventory.size()) {
+            int x = (int) (gp.tileSize * 16.5);
+            int y = (int) (gp.tileSize * 5.5);
+            int width = (int) (gp.tileSize * 2.5);
+            int height = (int) (gp.tileSize * 1.5);
+            drawPopUpWindow(x, y, width, height);
+            g2.drawImage(coin, x + 10, y + 16, 32, 32, null);
+            sellingPrice = gp.player.inventory.get(indexItem).price - (gp.player.inventory.get(indexItem).price / 3);
+            String price = String.valueOf(sellingPrice);
+            x += gp.tileSize;
+            g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25));
+            g2.drawString(price, x, y + (gp.tileSize - 15));
+        }
+
+        if (gp.keyH.cPressed) {
+            try {
+                if (gp.player.inventory.get(indexItem) != null) {
+                    if (gp.player.inventory.get(indexItem) == gp.player.currentTool) {
+                        commandNum = 0;
+                        tradingState = 0;
+                        gp.gameState = GameState.DIALOGUE;
+                        currentDialogue = "You can't sell your current\nweapon";
+                    } else {
+                        if (gp.player.inventory.get(indexItem).howManyOfItem > 1) {
+                            gp.player.inventory.get(indexItem).howManyOfItem--;
+                        } else {
+                            gp.player.inventory.remove(indexItem);
+                        }
+                        gp.player.coins += (int) (sellingPrice);
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                commandNum = 0;
+                tradingState = 0;
+                gp.gameState = GameState.DIALOGUE;
+                currentDialogue = "You can't sell nothing.";
+            }
+            gp.keyH.cPressed = false;
+        }
+    }
+
+    public void builderSell(){
+        int x = gp.tileSize * 2;
+        int y = gp.tileSize;
+        int width = gp.tileSize * 6;
+        int height = gp.tileSize * 5;
+        drawPopUpWindow(x, y, width, height);
+    }
+
     /**
      * When in inventory, slots are drawn 4x5, so this method returns index of item in arraylist.
      *

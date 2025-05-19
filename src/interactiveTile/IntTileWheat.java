@@ -2,7 +2,7 @@ package interactiveTile;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 import object.ObjWheat;
 
 public class IntTileWheat extends InteractiveTile{
@@ -22,7 +22,7 @@ public class IntTileWheat extends InteractiveTile{
     }
 
     public boolean isRequiredItem(Entity entity){
-        return entity.currentTool.typeOfItem == ToolType.HOE;
+        return entity.currentTool.typeOfItem == ItemType.HOE;
     }
 
     public void playSoundEffect(){

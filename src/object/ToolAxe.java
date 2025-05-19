@@ -2,7 +2,7 @@ package object;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 
 public class ToolAxe extends Entity {
 
@@ -32,7 +32,7 @@ public class ToolAxe extends Entity {
                 price = 320;
                 break;
         }
-        typeOfItem = ToolType.AXE;
+        typeOfItem = ItemType.AXE;
         attackValue = level;
     }
 }

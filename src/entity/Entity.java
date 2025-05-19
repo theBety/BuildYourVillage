@@ -1,7 +1,7 @@
 package entity;
 
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 import main.UtilityTool;
 
 import javax.imageio.ImageIO;
@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public abstract class Entity {
@@ -42,14 +43,17 @@ public abstract class Entity {
     public int strength;
     public int attack;
     public Entity currentTool;
-    public Entity currentBoots;
     public int life;
     public int level;
     public int exp;
     public int expToNextLevel;
     public int value;
     public ArrayList<Entity> inventory = new ArrayList<>();
+    public HashMap<Entity, int[]> requireForHouse = new HashMap<Entity, int[]>();
     public final int inventoryCapacity = 20;
+    public boolean isStackable = false;
+    public int howManyOfItem = 1;
+    public String typeOfVillager;
 
 
     //Item attributes
@@ -57,7 +61,7 @@ public abstract class Entity {
     public BufferedImage image;
     public boolean collisionObject = false;
     public String descriptionOfItem = "";
-    public ToolType typeOfItem;
+    public ItemType typeOfItem;
     public int price;
 
     public Entity(GamePanel gp) {
@@ -87,12 +91,14 @@ public abstract class Entity {
     public void action() {
     }
 
-    public void useObject(Entity e) {
+    public boolean useObject(Entity e) {
+        return false;
         //video 28
     }
-    public void dropItem(Entity droppedItem){
+
+    public void dropItem(Entity droppedItem) {
         for (int i = 0; i < gp.objects.length; i++) {
-            if(gp.objects[gp.currentMap][i] == null){
+            if (gp.objects[gp.currentMap][i] == null) {
                 gp.objects[gp.currentMap][i] = droppedItem;
                 gp.objects[gp.currentMap][i].worldX = worldX;
                 gp.objects[gp.currentMap][i].worldY = worldY;
@@ -138,7 +144,6 @@ public abstract class Entity {
         }
     }
 
-    //dialog nefunguje nevim proc
     public void speak() {
         if (dialogues[dialogueCounter] == null) {
             dialogueCounter = 0;
@@ -161,6 +166,55 @@ public abstract class Entity {
                 direction = "left";
                 break;
         }
+    }
+
+    public void interact() {
+    }
+    public void interact2() {
+    }
+
+    /**
+     * Check if there's any object around entity (in most cases player). Checks if col and row of objects are
+     * matching, also its name must match with the targetName.
+     *
+     * @param entity       - in most cases player - the entity which surroundings we're checking.
+     * @param entityTarget - entity (object/item) we 'want' to find
+     * @param targetName   name of that object
+     * @return index of a detected object.
+     */
+    public int getDetected(Entity entity, Entity[][] entityTarget, String targetName) {
+        int index = -1;
+        int nextWorldX = entity.getLeftX();
+        int nextWorldY = entity.getTopY();
+
+        switch (entity.direction) {
+            case "up":
+                nextWorldY = entity.getTopY() - 1;
+                break;
+            case "down":
+                nextWorldY = entity.getTopY() + 1;
+                break;
+            case "left":
+                nextWorldX = entity.getLeftX() - 1;
+                break;
+            case "right":
+                nextWorldX = entity.getLeftX() + 1;
+                break;
+        }
+        int col = nextWorldX / gp.tileSize;
+        int row = nextWorldY / gp.tileSize;
+
+        for (int i = 0; i < entityTarget[1].length; i++) {
+            if (entityTarget[gp.currentMap][i] != null) {
+                if (entityTarget[gp.currentMap][i].getCol() == col &&
+                        entityTarget[gp.currentMap][i].getRow() == row &&
+                        Objects.equals(entityTarget[gp.currentMap][i].name, targetName)) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        return index;
     }
 
     /**
@@ -201,4 +255,31 @@ public abstract class Entity {
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
         }
     }
+
+    //region Set&Get
+    //Getters for x and y of entities solid areas.
+    public int getLeftX() {
+        return worldX + solidArea.x;
+    }
+
+    public int getRightX() {
+        return worldX + solidArea.x + solidArea.width;
+    }
+
+    public int getTopY() {
+        return worldY + solidArea.y;
+    }
+
+    public int getBottomY() {
+        return worldY + solidArea.y + solidArea.height;
+    }
+
+    public int getCol() {
+        return getLeftX() / gp.tileSize;
+    }
+
+    public int getRow() {
+        return getTopY() / gp.tileSize;
+    }
+    //endregion
 }

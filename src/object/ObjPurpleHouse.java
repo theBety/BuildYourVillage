@@ -2,7 +2,7 @@ package object;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 
 import java.awt.*;
 
@@ -12,7 +12,7 @@ public class ObjPurpleHouse extends Entity {
         super(gp);
 
         name = "purpleHouse";
-        typeOfItem = ToolType.PLACED;
+        typeOfItem = ItemType.PLACED;
         down1 = setUpImage("/objects/purpleHouse", gp.tileSize * 2, gp.tileSize*2);
         collisionObject = true;
         solidArea = new Rectangle(solidAreaDefaultX,solidAreaDefaultY, gp.tileSize*3, gp.tileSize*2);

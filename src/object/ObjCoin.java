@@ -2,7 +2,7 @@ package object;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 
 import java.awt.*;
 
@@ -13,16 +13,17 @@ public class ObjCoin extends Entity {
         super(gp);
         this.gp = gp;
 
-        typeOfItem = ToolType.PICKUP;
+        typeOfItem = ItemType.PICKUP;
         name = "coin";
         value = 5;
         down1 = setUpImage("/objects/coin", gp.tileSize/2, gp.tileSize/2);
         descriptionOfItem = "Coin\nBuy items!";
     }
 
-    public void useObject(Entity entity) {
+    public boolean useObject(Entity entity) {
         gp.ui.addMessage("coin +" + value);
         gp.player.coins += value;
+        return true;
     }
 
     @Override

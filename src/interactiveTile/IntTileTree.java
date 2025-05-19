@@ -2,7 +2,7 @@ package interactiveTile;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 import object.ObjLog;
 
 public class IntTileTree extends InteractiveTile{
@@ -21,7 +21,7 @@ public class IntTileTree extends InteractiveTile{
     }
 
     public boolean isRequiredItem(Entity entity){
-        return entity.currentTool.typeOfItem == ToolType.AXE;
+        return entity.currentTool.typeOfItem == ItemType.AXE;
     }
 
     public void playSoundEffect(){

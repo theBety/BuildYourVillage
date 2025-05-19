@@ -7,21 +7,19 @@ import object.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Random;
 
 public class Villager extends Entity {
-    public HashMap<Integer, String> trades = new HashMap<>();
 
     public Villager(GamePanel gp, VillagerType type) {
         super(gp);
         direction = "left";
         speed = 2;
-        String typeOfVillager = utilityTool.firstLetterUppercase(type.toString());
+        typeOfVillager = utilityTool.firstLetterUppercase(type.toString());
         getVillagerImage(typeOfVillager);
         setDialogue(typeOfVillager);
-        setitems(typeOfVillager);
-        //makeTrades(typeOfVillager);
+        setItems(typeOfVillager);
+        valuesForHouse();
     }
 
 
@@ -34,36 +32,6 @@ public class Villager extends Entity {
         left2 = setUpImage("/NPC/left2" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
         right1 = setUpImage("/NPC/right1" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
         right2 = setUpImage("/NPC/right2" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
-    }
-
-    public void makeTrades(String typeOfVillager) {
-        int wantedNumberOnCounter = -1;
-        wantedNumberOnCounter = switch (typeOfVillager) {
-            case "Wood" -> 0;
-            case "Builder" -> 1;
-            case "Smith" -> 2;
-            default -> wantedNumberOnCounter;
-        };
-        if (wantedNumberOnCounter != -1) {
-            try {
-                BufferedReader br = new BufferedReader(new FileReader("Trades.txt"));
-                String text;
-                int counter = -1;
-                while ((text = br.readLine()) != null) {
-                    counter++;
-                    if (counter == wantedNumberOnCounter) {
-                        String[] line = text.split(",");
-                        String[] oneTrade;
-                        for (String s : line) {
-                            oneTrade = s.split(":");
-                            trades.put(Integer.parseInt(oneTrade[0]), oneTrade[1]);
-                        }
-                    }
-                }
-            } catch (IOException i) {
-                System.out.println("IO Exception");
-            }
-        }
     }
 
     public void setDialogue(String typeOfVillager) {
@@ -94,7 +62,7 @@ public class Villager extends Entity {
         }
     }
 
-    public void setitems(String typeOfVillager) {
+    public void setItems(String typeOfVillager) {
         switch (typeOfVillager) {
             case "Seller": {
                 inventory.clear();
@@ -127,6 +95,30 @@ public class Villager extends Entity {
                 inventory.add(new ToolAxe(gp, 2));
                 inventory.add(new ToolAxe(gp, 3));
             }
+        }
+    }
+
+    public void valuesForHouse() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("valuesForHouse.txt"));
+            String line;
+            int[] finalValues = new int[4];
+            Entity[] objects = new Entity[4];
+            objects[0] = new ObjLog(gp);
+            objects[1] = new ObjClay(gp);
+            objects[2] = new ObjStone(gp);
+            objects[3] = new ObjWheat(gp);
+            int counter = 0;
+            while ((line = br.readLine()) != null) {
+                String[] text = line.split(",");
+                for (int i = 0; i < text.length; i++) {
+                    finalValues[i] = Integer.parseInt(text[i]);
+                }
+                requireForHouse.put(objects[counter], finalValues);
+                counter++;
+            }
+        } catch (IOException i) {
+            System.err.println(i.getMessage());
         }
     }
 }

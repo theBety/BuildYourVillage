@@ -2,7 +2,7 @@ package object;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 
 import java.awt.*;
 
@@ -11,9 +11,10 @@ public class ObjClay extends Entity {
         super(gp);
         down1 = setUpImage("/objects/Clay", gp.tileSize / 2, gp.tileSize / 2);
         name = "clay";
-        typeOfItem = ToolType.MATERIAL;
+        typeOfItem = ItemType.MATERIAL;
         descriptionOfItem = "Clay\nGive to builder to build walls!";
         price = 2;
+        isStackable = true;
     }
 
     @Override

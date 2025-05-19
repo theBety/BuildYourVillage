@@ -3,7 +3,7 @@ package entity;
 import main.GamePanel;
 import main.GameState;
 import main.KeyHandler;
-import main.ToolType;
+import main.ItemType;
 import object.*;
 
 import java.awt.*;
@@ -47,7 +47,6 @@ public class Player extends Entity {
     public void setDefaultItems() {
         inventory.add(currentTool);
         inventory.add(new ObjKey(gp));
-        inventory.add(new ObjTrapdoor(gp));
         inventory.add(new ToolAxe(gp, 3));
         inventory.add(new ToolAxe(gp, 2));
         inventory.add(new ToolAxe(gp, 1));
@@ -77,10 +76,11 @@ public class Player extends Entity {
     }
 
     /**
-     *
+     * Reads images of player - they're changing when he's moving.
+     * Based on what weapon he's holding, the image changes.
      */
     public void getAttackImages() {
-        if (currentTool.typeOfItem == ToolType.AXE) {
+        if (currentTool.typeOfItem == ItemType.AXE) {
             up1Axe1 = setUpImage("/player/back1Axe1", gp.tileSize * 2, gp.tileSize);
             up1Axe2 = setUpImage("/player/back1Axe2", gp.tileSize * 2, gp.tileSize);
             down1Axe1 = setUpImage("/player/front1Axe1", gp.tileSize * 2, gp.tileSize);
@@ -89,7 +89,7 @@ public class Player extends Entity {
             left1Axe2 = setUpImage("/player/left1Axe2", gp.tileSize * 2, gp.tileSize);
             right1Axe1 = setUpImage("/player/right1Axe1", gp.tileSize * 2, gp.tileSize);
             right1Axe2 = setUpImage("/player/right1Axe2", gp.tileSize * 2, gp.tileSize);
-        } else if (currentTool.typeOfItem == ToolType.PICAXE) {
+        } else if (currentTool.typeOfItem == ItemType.PICAXE) {
             up1Axe1 = setUpImage("/player/back1Pic1", gp.tileSize * 2, gp.tileSize);
             up1Axe2 = setUpImage("/player/back1Pic2", gp.tileSize * 2, gp.tileSize);
             down1Axe1 = setUpImage("/player/front1Pic1", gp.tileSize * 2, gp.tileSize);
@@ -124,7 +124,6 @@ public class Player extends Entity {
             expToNextLevel *= 2;
             strength += 1;
         }
-
         if (attacking) {
             attack();
         } else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
@@ -181,13 +180,18 @@ public class Player extends Entity {
 
     public void pickUpObject(int index) {
         String text;
+
         if (index != -1) {
-            if (gp.objects[gp.currentMap][index].typeOfItem.equals(ToolType.PICKUP)) {
+            if (gp.objects[gp.currentMap][index].typeOfItem.equals(ItemType.PICKUP)) {
                 gp.objects[gp.currentMap][index].useObject(this);
                 gp.objects[gp.currentMap][index] = null;
+            } else if (gp.objects[gp.currentMap][index].typeOfItem.equals(ItemType.OBSTACLE)) {
+                if (keyH.enterPressed) {
+                    gp.objects[gp.currentMap][index].interact();
+                }
+                keyH.enterPressed = false;
             } else {
-                if (inventory.size() != inventoryCapacity && !gp.objects[gp.currentMap][index].collisionObject) {
-                    inventory.add(gp.objects[gp.currentMap][index]);
+                if (canStackItem(gp.objects[gp.currentMap][index])) {
                     //play sound effect
                     text = "You picked up a " + gp.objects[gp.currentMap][index].name + "!";
                     exp += 3;
@@ -284,25 +288,72 @@ public class Player extends Entity {
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.typeOfItem == ToolType.AXE || selectedItem.typeOfItem == ToolType.PICAXE
-                    || selectedItem.typeOfItem == ToolType.HOE) {
+            if (selectedItem.typeOfItem == ItemType.AXE || selectedItem.typeOfItem == ItemType.PICAXE
+                    || selectedItem.typeOfItem == ItemType.HOE) {
                 currentTool = selectedItem;
                 attack = getAttack();
                 getAttackImages();
             }
-            if (selectedItem.typeOfItem == ToolType.MATERIAL) {
-                //jeste nevim jestli funguje
-                selectedItem.useObject(this);
-                inventory.remove(itemIndex);
+            if (selectedItem.typeOfItem == ItemType.MATERIAL) {
+                if (selectedItem.useObject(this)) {
+                    if (selectedItem.howManyOfItem > 1) {
+                        selectedItem.howManyOfItem--;
+                    } else {
+                        inventory.remove(itemIndex);
+                    }
+                }
             }
         }
+    }
+
+    /**
+     * Searches through players' inventory and tries to find item with requested name.
+     *
+     * @param itemName - name of searched item.
+     * @return - index in inventory of searched item
+     */
+    public int findItemInInventory(String itemName) {
+        int itemIndex = -1;
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).name.equals(itemName)) {
+                itemIndex = i;
+                break;
+            }
+        }
+        return itemIndex;
+    }
+
+    public boolean canStackItem(Entity item) {
+        boolean canStackItem = false;
+        if (!item.collisionObject) {
+            if (item.isStackable) {
+                int index = findItemInInventory(item.name);
+                if (index != -1) {
+                    if (inventory.get(index).typeOfItem == ItemType.MATERIAL && !inventory.get(index).name.equals("key")) {
+                        inventory.get(index).howManyOfItem += 3;
+                    } else {
+                        inventory.get(index).howManyOfItem++;
+                    }
+                    canStackItem = true;
+                } else {
+                    if (inventory.size() != inventoryCapacity) {
+                        inventory.add(item);
+                        canStackItem = true;
+                    }
+                }
+            } else {
+                if (inventory.size() != inventoryCapacity) {
+                    inventory.add(item);
+                    canStackItem = true;
+                }
+            }
+        }
+        return canStackItem;
     }
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         int tempScreenX = screenX;
-        int tempScreenY = screenY;
-
 
         switch (direction) {
             case "up":
@@ -382,7 +433,7 @@ public class Player extends Entity {
                 break;
         }
 
-        g2.drawImage(image, tempScreenX, tempScreenY, null);
+        g2.drawImage(image, tempScreenX, screenY, null);
     }
 }
 /*

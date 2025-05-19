@@ -2,7 +2,7 @@ package object;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 
 public class ToolPicaxe extends Entity {
     public ToolPicaxe(GamePanel gp, int level) {
@@ -32,7 +32,7 @@ public class ToolPicaxe extends Entity {
                 price = 320;
                 break;
         }
-        typeOfItem = ToolType.PICAXE;
+        typeOfItem = ItemType.PICAXE;
         attackValue = level;
     }
 }

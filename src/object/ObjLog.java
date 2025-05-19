@@ -2,7 +2,7 @@ package object;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 
 import java.awt.*;
 
@@ -12,9 +12,10 @@ public class ObjLog extends Entity {
         super(gp);
         down1 = setUpImage("/objects/Log", gp.tileSize/2, gp.tileSize/2);
         name = "log";
-        typeOfItem = ToolType.MATERIAL;
+        typeOfItem = ItemType.MATERIAL;
         descriptionOfItem = "Log\nGive to builder to build floors!";
         price = 2;
+        isStackable = true;
     }
 
     @Override

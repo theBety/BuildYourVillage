@@ -2,7 +2,7 @@ package object;
 
 import entity.Entity;
 import main.GamePanel;
-import main.ToolType;
+import main.ItemType;
 
 public class ToolHoe extends Entity {
     public ToolHoe(GamePanel gp, int level) {
@@ -31,7 +31,7 @@ public class ToolHoe extends Entity {
                 price = 320;
                 break;
         }
-        typeOfItem = ToolType.HOE;
+        typeOfItem = ItemType.HOE;
         attackValue = level;
     }
 }

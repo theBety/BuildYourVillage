@@ -44,8 +44,13 @@ public class PlacingSetter {
         gp.objects[forMap][counterInObject].worldY = 25 * gp.tileSize;
         counterInObject++;
 
+        gp.objects[forMap][counterInObject] = new ObjChest(gp, new ToolAxe(gp, 2));
+        gp.objects[forMap][counterInObject].worldX = 17 * gp.tileSize;
+        gp.objects[forMap][counterInObject].worldY = 18 * gp.tileSize;
+        counterInObject++;
+
         forMap = 1;
-        gp.objects[forMap][counterInObject] = new ObjChest(gp);
+        gp.objects[forMap][counterInObject] = new ObjChest(gp, new ObjCoin(gp));
         gp.objects[forMap][counterInObject].worldX = 23 * gp.tileSize;
         gp.objects[forMap][counterInObject].worldY = 22 * gp.tileSize;
         counterInObject++;
