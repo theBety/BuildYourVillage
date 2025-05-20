@@ -284,7 +284,7 @@ public class Player extends Entity {
      * Can set the current tool to a different tool. Player can switch tools.
      */
     public void selectItem() {
-        int itemIndex = gp.ui.getItemIndexInInventory(gp.ui.slotColPlayer, gp.ui.slotRowPlayer);
+        int itemIndex = gp.ui.ut.getItemIndexInInventory(gp.ui.slotColPlayer, gp.ui.slotRowPlayer);
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
 
@@ -306,28 +306,11 @@ public class Player extends Entity {
         }
     }
 
-    /**
-     * Searches through players' inventory and tries to find item with requested name.
-     *
-     * @param itemName - name of searched item.
-     * @return - index in inventory of searched item
-     */
-    public int findItemInInventory(String itemName) {
-        int itemIndex = -1;
-        for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i).name.equals(itemName)) {
-                itemIndex = i;
-                break;
-            }
-        }
-        return itemIndex;
-    }
-
     public boolean canStackItem(Entity item) {
         boolean canStackItem = false;
         if (!item.collisionObject) {
             if (item.isStackable) {
-                int index = findItemInInventory(item.name);
+                int index = utilityTool.findItemInInventory(item.name);
                 if (index != -1) {
                     if (inventory.get(index).typeOfItem == ItemType.MATERIAL && !inventory.get(index).name.equals("key")) {
                         inventory.get(index).howManyOfItem += 3;
@@ -344,7 +327,6 @@ public class Player extends Entity {
             } else {
                 if (inventory.size() != inventoryCapacity) {
                     inventory.add(item);
-                    canStackItem = true;
                 }
             }
         }

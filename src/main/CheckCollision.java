@@ -54,6 +54,13 @@ public class CheckCollision {
         }
     }
 
+    /**
+     * Checks Collision between player and object on a map. If a collision is happening, the method returns index of
+     * an object with which the player is in collision
+     * @param entity with what entity the method is dealing
+     * @param isPlayer if the entity is player or not
+     * @return index in an array.
+     */
     public int checkObject(Entity entity, boolean isPlayer) {
         int index = -1;
 
@@ -122,7 +129,8 @@ public class CheckCollision {
     }
 
     /**
-     * Method goes through Entities and compares theirs and players' solid areas if they hot each other at any coordinate.
+     * Method goes through Entities and compares theirs and players'
+     * solid areas if they hit each other at any coordinate.
      * If not, method returns -1. If so, method returns index of npc that collided with player
      *
      * @param entity player
@@ -185,7 +193,7 @@ public class CheckCollision {
      * Checks collision between player and entity (npc, for example). I need this method because if it wasn't there. Entity could go
      * through player but player not through entity. (Collision would be only one-sided).
      *
-     * @param entity
+     * @param entity that's being checked.
      */
     public void checkPlayer(Entity entity) {
         entity.solidArea.x += entity.worldX;

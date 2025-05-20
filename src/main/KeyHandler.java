@@ -2,7 +2,6 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, rightPressed, leftPressed, spacePressed, enterPressed, cPressed;
@@ -20,24 +19,14 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-
-        if (gp.gameState.equals(GameState.PLAYING)) {
-            gameStatePlaying(code);
-        } else if (gp.gameState.equals(GameState.PAUSED)) {
-            gameStatePaused(code);
-        } else if (gp.gameState.equals(GameState.DIALOGUE)) {
-            gameStateDialogue(code);
-        } else if (gp.gameState.equals(GameState.TITLE)) {
-            gameStateTitle(code);
-        } else if (gp.gameState.equals(GameState.TUTORIAL)) {
-            gameStateTutorial(code);
-        } else if (gp.gameState.equals(GameState.CHARACTER)) {
-            gameStateCharacter(code);
-        } else if (gp.gameState.equals(GameState.SETTINGS)) {
-            gameStateSettings(code);
-        } else if (gp.gameState.equals(GameState.TRADING)) {
-            gameStateTrading(code);
-        }
+        if (gp.gameState.equals(GameState.PLAYING)) gameStatePlaying(code);
+        else if (gp.gameState.equals(GameState.PAUSED)) gameStatePaused(code);
+        else if (gp.gameState.equals(GameState.DIALOGUE)) gameStateDialogue(code);
+        else if (gp.gameState.equals(GameState.TITLE)) gameStateTitle(code);
+        else if (gp.gameState.equals(GameState.TUTORIAL)) gameStateTutorial(code);
+        else if (gp.gameState.equals(GameState.CHARACTER)) gameStateCharacter(code);
+        else if (gp.gameState.equals(GameState.SETTINGS)) gameStateSettings(code);
+        else if (gp.gameState.equals(GameState.TRADING)) gameStateTrading(code);
     }
 
     /**
@@ -46,36 +35,16 @@ public class KeyHandler implements KeyListener {
      * @param code code from keyboard.
      */
     public void gameStatePlaying(int code) {
-        if (code == KeyEvent.VK_W) {
-            upPressed = true;
-        }
-        if (code == KeyEvent.VK_S) {
-            downPressed = true;
-        }
-        if (code == KeyEvent.VK_A) {
-            leftPressed = true;
-        }
-        if (code == KeyEvent.VK_D) {
-            rightPressed = true;
-        }
-        if (code == KeyEvent.VK_ENTER) {
-            enterPressed = !enterPressed;
-        }
-        if (code == KeyEvent.VK_R) {
-            gp.gameState = GameState.PAUSED;
-        }
-        if (code == KeyEvent.VK_SPACE) {
-            spacePressed = true;
-        }
-        if (code == KeyEvent.VK_T) {
-            showDebug = !showDebug;
-        }
-        if (code == KeyEvent.VK_E) {
-            gp.gameState = GameState.CHARACTER;
-        }
-        if (code == KeyEvent.VK_SHIFT) {
-            gp.gameState = GameState.SETTINGS;
-        }
+        if (code == KeyEvent.VK_W) upPressed = true;
+        if (code == KeyEvent.VK_S) downPressed = true;
+        if (code == KeyEvent.VK_A) leftPressed = true;
+        if (code == KeyEvent.VK_D) rightPressed = true;
+        if (code == KeyEvent.VK_ENTER) enterPressed = !enterPressed;
+        if (code == KeyEvent.VK_R) gp.gameState = GameState.PAUSED;
+        if (code == KeyEvent.VK_SPACE) spacePressed = true;
+        if (code == KeyEvent.VK_T) showDebug = !showDebug;
+        if (code == KeyEvent.VK_E) gp.gameState = GameState.CHARACTER;
+        if (code == KeyEvent.VK_SHIFT) gp.gameState = GameState.SETTINGS;
     }
 
     /**
@@ -84,12 +53,8 @@ public class KeyHandler implements KeyListener {
      * @param code code from keyboard.
      */
     public void gameStateDialogue(int code) {
-        if (code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = GameState.PLAYING;
-        }
-        if (code == KeyEvent.VK_ENTER) {
-            enterPressed = !enterPressed;
-        }
+        if (code == KeyEvent.VK_ESCAPE) gp.gameState = GameState.PLAYING;
+        if (code == KeyEvent.VK_ENTER) enterPressed = !enterPressed;
     }
 
     /**
@@ -100,23 +65,15 @@ public class KeyHandler implements KeyListener {
     public void gameStateTitle(int code) {
         if (code == KeyEvent.VK_UP) {
             gp.ui.commandNum--;
-            if (gp.ui.commandNum < 0) {
-                gp.ui.commandNum = 1;
-            }
+            if (gp.ui.commandNum < 0) gp.ui.commandNum = 1;
         }
         if (code == KeyEvent.VK_DOWN) {
             gp.ui.commandNum++;
-            if (gp.ui.commandNum > 1) {
-                gp.ui.commandNum = 0;
-            }
+            if (gp.ui.commandNum > 1) gp.ui.commandNum = 0;
         }
         if (code == KeyEvent.VK_ENTER) {
-            if (gp.ui.commandNum == 0) {
-                gp.gameState = GameState.PLAYING;
-            }
-            if (gp.ui.commandNum == 1) {
-                gp.gameState = GameState.TUTORIAL;
-            }
+            if (gp.ui.commandNum == 0) gp.gameState = GameState.PLAYING;
+            if (gp.ui.commandNum == 1) gp.gameState = GameState.TUTORIAL;
             enterPressed = false;
         }
     }
@@ -127,9 +84,7 @@ public class KeyHandler implements KeyListener {
      * @param code code from keyboard.
      */
     public void gameStatePaused(int code) {
-        if (code == KeyEvent.VK_R) {
-            gp.gameState = GameState.PLAYING;
-        }
+        if (code == KeyEvent.VK_R) gp.gameState = GameState.PLAYING;
     }
 
     /**
@@ -138,9 +93,7 @@ public class KeyHandler implements KeyListener {
      * @param code code from keyboard.
      */
     public void gameStateTutorial(int code) {
-        if (code == KeyEvent.VK_ENTER) {
-            gp.gameState = GameState.PLAYING;
-        }
+        if (code == KeyEvent.VK_ENTER) gp.gameState = GameState.PLAYING;
     }
 
     /**
@@ -149,9 +102,7 @@ public class KeyHandler implements KeyListener {
      * @param code code from keyboard.
      */
     public void gameStateCharacter(int code) {
-        if (code == KeyEvent.VK_E) {
-            gp.gameState = GameState.PLAYING;
-        }
+        if (code == KeyEvent.VK_E) gp.gameState = GameState.PLAYING;
         playerInventory(code);
     }
 
@@ -161,21 +112,14 @@ public class KeyHandler implements KeyListener {
      * @param code code from keyboard.
      */
     public void gameStateSettings(int code) {
-        if (code == KeyEvent.VK_SHIFT) {
-            gp.gameState = GameState.PLAYING;
-        }
+        if (code == KeyEvent.VK_SHIFT) gp.gameState = GameState.PLAYING;
         if (code == KeyEvent.VK_W) {
             gp.ui.commandNum--;
-
-            if (gp.ui.commandNum < 0) {
-                gp.ui.commandNum = 4;
-            }
+            if (gp.ui.commandNum < 0) gp.ui.commandNum = 4;
         }
         if (code == KeyEvent.VK_S) {
             gp.ui.commandNum++;
-            if (gp.ui.commandNum > 4) {
-                gp.ui.commandNum = 0;
-            }
+            if (gp.ui.commandNum > 4) gp.ui.commandNum = 0;
         }
         //Volume controls
         if (code == KeyEvent.VK_D) {
@@ -197,9 +141,7 @@ public class KeyHandler implements KeyListener {
             }
         }
         if (code == KeyEvent.VK_ENTER) {
-            if (gp.ui.commandNum == 2) {
-                gp.gameState = GameState.TUTORIAL;
-            }
+            if (gp.ui.commandNum == 2) gp.gameState = GameState.TUTORIAL;
             if (gp.ui.commandNum == 3) {
                 System.out.println("Game ended successfully");
                 System.exit(1);
@@ -209,38 +151,25 @@ public class KeyHandler implements KeyListener {
     }
 
     public void gameStateTrading(int code) {
-        if (code == KeyEvent.VK_ENTER) {
-            enterPressed = true;
-        }
-        if (code == KeyEvent.VK_C) {
-            cPressed = true;
-        }
+        if (code == KeyEvent.VK_ENTER) enterPressed = true;
+        if (code == KeyEvent.VK_C) cPressed = true;
         if (gp.ui.tradingState == 0) {
             if (code == KeyEvent.VK_W) {
                 gp.ui.commandNum--;
-
-                if (gp.ui.commandNum < 0) {
-                    gp.ui.commandNum = 2;
-                }
+                if (gp.ui.commandNum < 0) gp.ui.commandNum = 2;
             }
             if (code == KeyEvent.VK_S) {
                 gp.ui.commandNum++;
-                if (gp.ui.commandNum > 2) {
-                    gp.ui.commandNum = 0;
-                }
+                if (gp.ui.commandNum > 2) gp.ui.commandNum = 0;
             }
         }
         if (gp.ui.tradingState == 1) {
             villagerInventory(code);
-            if (code == KeyEvent.VK_ESCAPE) {
-                gp.ui.tradingState = 0;
-            }
+            if (code == KeyEvent.VK_ESCAPE) gp.ui.tradingState = 0;
         }
         if (gp.ui.tradingState == 2) {
             playerInventory(code);
-            if (code == KeyEvent.VK_ESCAPE) {
-                gp.ui.tradingState = 0;
-            }
+            if (code == KeyEvent.VK_ESCAPE) gp.ui.tradingState = 0;
         }
     }
 
@@ -317,17 +246,9 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-        if (code == KeyEvent.VK_W) {
-            upPressed = false;
-        }
-        if (code == KeyEvent.VK_S) {
-            downPressed = false;
-        }
-        if (code == KeyEvent.VK_A) {
-            leftPressed = false;
-        }
-        if (code == KeyEvent.VK_D) {
-            rightPressed = false;
-        }
+        if (code == KeyEvent.VK_W) upPressed = false;
+        if (code == KeyEvent.VK_S) downPressed = false;
+        if (code == KeyEvent.VK_A) leftPressed = false;
+        if (code == KeyEvent.VK_D) rightPressed = false;
     }
 }

@@ -45,7 +45,7 @@ public class TileManager {
     }
 
     public void setUpImage(int index, String imageName, boolean collision) {
-        UtilityTool utilityTool = new UtilityTool();
+        UtilityTool utilityTool = new UtilityTool(gp);
         try {
             tile[index] = new Tile();
             tile[index].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/" + imageName + ".png")));

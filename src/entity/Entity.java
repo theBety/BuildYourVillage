@@ -33,7 +33,7 @@ public abstract class Entity {
     public Rectangle solidArea = new Rectangle(8, 16, 32, 32);
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public String[] dialogues = new String[10];
-    UtilityTool utilityTool = new UtilityTool();
+    UtilityTool utilityTool;
 
     //Character Attributes
     public int speed;
@@ -49,11 +49,12 @@ public abstract class Entity {
     public int expToNextLevel;
     public int value;
     public ArrayList<Entity> inventory = new ArrayList<>();
-    public HashMap<Entity, int[]> requireForHouse = new HashMap<Entity, int[]>();
+    public HashMap<Entity, int[]> requireForHouse = new HashMap<>();
     public final int inventoryCapacity = 20;
     public boolean isStackable = false;
     public int howManyOfItem = 1;
     public String typeOfVillager;
+    public boolean drawBiggerMaterial = false;
 
 
     //Item attributes
@@ -66,6 +67,7 @@ public abstract class Entity {
 
     public Entity(GamePanel gp) {
         this.gp = gp;
+         utilityTool = new UtilityTool(gp);
     }
 
     /**
@@ -134,20 +136,16 @@ public abstract class Entity {
             }
             spriteCounter++;
             if (spriteCounter > 13) {
-                if (spriteNumber == 1) {
-                    spriteNumber = 2;
-                } else if (spriteNumber == 2) {
-                    spriteNumber = 1;
-                }
+                if (spriteNumber == 1) spriteNumber = 2;
+                else if (spriteNumber == 2) spriteNumber = 1;
                 spriteCounter = 0;
             }
         }
     }
 
     public void speak() {
-        if (dialogues[dialogueCounter] == null) {
-            dialogueCounter = 0;
-        } else {
+        if (dialogues[dialogueCounter] == null) dialogueCounter = 0;
+        else {
             gp.ui.currentDialogue = dialogues[dialogueCounter];
             dialogueCounter++;
         }
@@ -170,6 +168,7 @@ public abstract class Entity {
 
     public void interact() {
     }
+
     public void interact2() {
     }
 

@@ -8,7 +8,7 @@ public class SoundManager {
     Clip video;
     URL soundURL[] = new URL[30];
     FloatControl fc;
-    int volumeScale = 5;//0-10
+    public int volumeScale = 5;//0-10
     float volume;
 
 

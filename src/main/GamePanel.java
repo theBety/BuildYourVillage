@@ -1,5 +1,6 @@
 package main;
 
+import UserInterface.UI;
 import entity.Entity;
 import entity.Player;
 import interactiveTile.InteractiveTile;
@@ -31,8 +32,8 @@ public class GamePanel extends JPanel implements Runnable {
     public PlacingSetter plSetter = new PlacingSetter(this);
     public UI ui = new UI(this);
     public EventManager eventManager = new EventManager(this);
-    SoundManager soundMusic = new SoundManager();
-    SoundManager soundEffects = new SoundManager();
+    public SoundManager soundMusic = new SoundManager();
+    public SoundManager soundEffects = new SoundManager();
 
     public Entity[][] objects = new Entity[maxMap][10];
     public Entity[][] npc = new Entity[maxMap][10];
@@ -193,5 +194,4 @@ public class GamePanel extends JPanel implements Runnable {
         soundEffects.setFile(index);
         soundEffects.play();
     }
-
 }
