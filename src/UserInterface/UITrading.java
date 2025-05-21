@@ -1,12 +1,11 @@
 package UserInterface;
 
 import entity.Entity;
-import entity.VillagerType;
 import main.GamePanel;
 import main.GameState;
+import main.ItemType;
 
 import java.awt.*;
-import java.util.Arrays;
 
 public class UITrading {
     GamePanel gp;
@@ -181,19 +180,100 @@ public class UITrading {
     }
 
     public void builderSell() {
+        String[] values = new String[4];
         int x = gp.tileSize * 2;
         int y = gp.tileSize;
         int width = gp.tileSize * 6;
         int height = gp.tileSize * 5;
         ui.ut.drawPopUpWindow(x, y, width, height);
-        y-= gp.tileSize/2;
+        y -= gp.tileSize / 2;
 
         for (Entity key : ui.villager.requireForHouse.keySet()) {
             y += gp.tileSize;
             ui.villager.drawBiggerMaterial = true;
             ui.g2.drawImage(key.down2, x + gp.tileSize, y, null);
-            ui.g2.drawString(Arrays.toString(ui.villager.requireForHouse.get(key)) + " X", x + (2*gp.tileSize), y);
+            values = ui.villager.requireForHouse.get(key);
+            switch (key.name) {
+                case "log":
+                    ui.villager.curValLog = Integer.parseInt(values[ui.villager.indexInArray]);
+                    ui.g2.drawString(ui.villager.curValLog + " X", x + (3 * gp.tileSize), y + gp.tileSize / 2);
+                    break;
+                case "wheat":
+                    ui.villager.curValWheat = Integer.parseInt(values[ui.villager.indexInArray]);
+                    ui.g2.drawString(ui.villager.curValWheat + " X", x + (3 * gp.tileSize), y + gp.tileSize / 2);
+                    break;
+                case "clay":
+                    ui.villager.curValClay = Integer.parseInt(values[ui.villager.indexInArray]);
+                    ui.g2.drawString(ui.villager.curValClay + " X", x + (3 * gp.tileSize), y + gp.tileSize / 2);
+                    break;
+                case "stone":
+                    ui.villager.curValStone = Integer.parseInt(values[ui.villager.indexInArray]);
+                    ui.g2.drawString(ui.villager.curValStone + " X", x + (3 * gp.tileSize), y + gp.tileSize / 2);
+                    break;
+            }
         }
         ui.villager.drawBiggerMaterial = false;
+
+        if (gp.keyH.cPressed) {
+            int indexItem = ui.ut.getItemIndexInInventory(ui.slotColPlayer, ui.slotRowPlayer);
+            try {
+                if (gp.player.inventory.get(indexItem) != null) {
+                    if (gp.player.inventory.get(indexItem) == gp.player.currentTool) {
+                        ui.commandNum = 0;
+                        ui.tradingState = 0;
+                        gp.gameState = GameState.DIALOGUE;
+                        ui.currentDialogue = "You can't sell your current\nweapon";
+                    } else {
+                        if (gp.player.inventory.get(indexItem).typeOfItem.equals(ItemType.MATERIAL)) {
+                            if (gp.player.inventory.get(indexItem).howManyOfItem <= Integer.parseInt(values[ui.villager.indexInArray])) {
+                                switch (gp.player.inventory.get(indexItem).name) {
+                                    case "log": {
+                                        ui.villager.curValLog -= gp.player.inventory.get(indexItem).howManyOfItem;
+                                        if (ui.villager.curValLog == 0) ui.villager.indexInArray++;
+                                        break;
+                                    }
+                                    case "wheat":
+                                        ui.villager.curValWheat -= gp.player.inventory.get(indexItem).howManyOfItem;
+                                        if (ui.villager.curValWheat == 0) ui.villager.indexInArray++;
+                                        break;
+                                    case "clay":
+                                        ui.villager.curValClay -= gp.player.inventory.get(indexItem).howManyOfItem;
+                                        if (ui.villager.curValClay == 0) ui.villager.indexInArray++;
+                                        break;
+                                    case "stone":
+                                        ui.villager.curValStone -= gp.player.inventory.get(indexItem).howManyOfItem;
+                                        if (ui.villager.curValStone == 0) ui.villager.indexInArray++;
+                                        break;
+                                }
+                                gp.player.inventory.remove(indexItem);
+                            } else {
+                                switch (gp.player.inventory.get(indexItem).name) {
+                                    case "log":
+                                        gp.player.inventory.get(indexItem).howManyOfItem -= ui.villager.curValLog;
+                                        break;
+                                    case "wheat":
+                                        gp.player.inventory.get(indexItem).howManyOfItem -= ui.villager.curValWheat;
+                                        break;
+                                    case "clay":
+                                        gp.player.inventory.get(indexItem).howManyOfItem -= ui.villager.curValClay;
+                                        break;
+                                    case "stone":
+                                        gp.player.inventory.get(indexItem).howManyOfItem -= ui.villager.curValStone;
+                                        break;
+                                }
+                                ui.villager.indexInArray++;
+                            }
+                        }
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Kurva uz");
+                /*ui.commandNum = 0;
+                ui.tradingState = 0;
+                gp.gameState = GameState.DIALOGUE;
+                ui.currentDialogue = "You can't sell nothing.";*/
+            }
+            gp.keyH.cPressed = false;
+        }
     }
 }

@@ -1,17 +1,13 @@
 package UserInterface;
 
 import entity.Entity;
-import entity.VillagerType;
+import entity.Villager;
 import main.GamePanel;
-import main.GameState;
 import main.UtilityTool;
 import object.ObjCoin;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -29,7 +25,7 @@ public class UI {
     public int slotRowVil = 0;
     ArrayList<String> messages = new ArrayList<>();
     ArrayList<Integer> messageCounter = new ArrayList<>();
-    public Entity villager;
+    public Villager villager;
     public UtilityTool ut;
     public UITrading uiTrading;
     public UITitleScreen uiTitleScreen;
@@ -38,7 +34,6 @@ public class UI {
 
     //for now, unused things.
     public boolean endGame = false;
-    public int SettingsInTitleScreen = 0;
     double playTime;
     DecimalFormat formatTime = new DecimalFormat("#0.0");
 

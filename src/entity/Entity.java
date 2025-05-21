@@ -49,14 +49,11 @@ public abstract class Entity {
     public int expToNextLevel;
     public int value;
     public ArrayList<Entity> inventory = new ArrayList<>();
-    public HashMap<Entity, int[]> requireForHouse = new HashMap<>();
     public final int inventoryCapacity = 20;
     public boolean isStackable = false;
     public int howManyOfItem = 1;
     public String typeOfVillager;
     public boolean drawBiggerMaterial = false;
-
-
     //Item attributes
     public int attackValue;
     public BufferedImage image;

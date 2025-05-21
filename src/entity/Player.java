@@ -307,13 +307,19 @@ public class Player extends Entity {
     }
 
     public boolean canStackItem(Entity item) {
+        int adding = 0;
         boolean canStackItem = false;
         if (!item.collisionObject) {
+            if(gp.gameState == GameState.PLAYING){
+                adding = 3;
+            }else{
+                adding = 1;
+            }
             if (item.isStackable) {
                 int index = utilityTool.findItemInInventory(item.name);
                 if (index != -1) {
                     if (inventory.get(index).typeOfItem == ItemType.MATERIAL && !inventory.get(index).name.equals("key")) {
-                        inventory.get(index).howManyOfItem += 3;
+                        inventory.get(index).howManyOfItem += adding;
                     } else {
                         inventory.get(index).howManyOfItem++;
                     }

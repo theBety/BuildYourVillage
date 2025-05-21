@@ -7,9 +7,13 @@ import object.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Villager extends Entity {
+    public HashMap<Entity, String[]> requireForHouse = new HashMap<>();
+    public int indexInArray = 0;
+    public int curValLog, curValWheat, curValStone, curValClay;
 
     public Villager(GamePanel gp, VillagerType type) {
         super(gp);
@@ -102,7 +106,6 @@ public class Villager extends Entity {
         try {
             BufferedReader br = new BufferedReader(new FileReader("valuesForHouse.txt"));
             String line;
-            int[] finalValues = new int[4];
             Entity[] objects = new Entity[4];
             objects[0] = new ObjLog(gp);
             objects[1] = new ObjClay(gp);
@@ -111,10 +114,7 @@ public class Villager extends Entity {
             int counter = 0;
             while ((line = br.readLine()) != null) {
                 String[] text = line.split(",");
-                for (int i = 0; i < text.length; i++) {
-                    finalValues[i] = Integer.parseInt(text[i]);
-                }
-                requireForHouse.put(objects[counter], finalValues);
+                requireForHouse.put(objects[counter], text);
                 counter++;
             }
         } catch (IOException i) {
