@@ -307,7 +307,7 @@ public class Player extends Entity {
     }
 
     public boolean canStackItem(Entity item) {
-        int adding = 0;
+        int adding;
         boolean canStackItem = false;
         if (!item.collisionObject) {
             if(gp.gameState == GameState.PLAYING){

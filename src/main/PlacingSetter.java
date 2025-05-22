@@ -16,18 +16,17 @@ public class PlacingSetter {
 
     GamePanel gp;
     int counterInObject = 0;
+    int forMap;
 
     public PlacingSetter(GamePanel gp) {
         this.gp = gp;
     }
 
+    /**
+     * Places Objects on a map
+     */
     public void setObject() {
-        int forMap = 0;
-
-        gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
-        gp.objects[forMap][counterInObject].worldX = 22 * gp.tileSize;
-        gp.objects[forMap][counterInObject].worldY = 18 * gp.tileSize;
-        counterInObject++;
+        forMap = 0;
 
         gp.objects[forMap][counterInObject] = new ObjKey(gp);
         gp.objects[forMap][counterInObject].worldX = 28 * gp.tileSize;
@@ -56,6 +55,9 @@ public class PlacingSetter {
         counterInObject++;
     }
 
+    /**
+     * Places entities on a map
+     */
     public void setNpc() {
         int forMap = 0;
         int counter = 0;
@@ -76,10 +78,6 @@ public class PlacingSetter {
         gp.npc[forMap][counter].worldX = 24 * gp.tileSize;
         gp.npc[forMap][counter].worldY = 32 * gp.tileSize;
         counter++;
-        gp.npc[forMap][counter] = new Villager(gp, VillagerType.BUILDER);
-        gp.npc[forMap][counter].worldX = 14 * gp.tileSize;
-        gp.npc[forMap][counter].worldY = 24 * gp.tileSize;
-        counter++;
         gp.npc[forMap][counter] = new Villager(gp, VillagerType.SMITH);
         gp.npc[forMap][counter].worldX = 29 * gp.tileSize;
         gp.npc[forMap][counter].worldY = 25 * gp.tileSize;
@@ -93,11 +91,10 @@ public class PlacingSetter {
         gp.npc[forMap][counter] = new Npc(gp);
         gp.npc[forMap][counter].worldX = 24 * gp.tileSize;
         gp.npc[forMap][counter].worldY = 25 * gp.tileSize;
-        counter++;
     }
 
     /**
-     * Places trees (leaves) on every tree trunk.
+     * Places interactive tiles (leaves, ores and paths) on a map.
      */
     public void setInteractiveTile() {
         try {
@@ -139,6 +136,40 @@ public class PlacingSetter {
             br.close();
         } catch (IOException e) {
             System.out.println("Something's wrong in placing setter");
+        }
+    }
+
+    /**
+     * Places a house on a map if player gave builder all materials.
+     * @param indexInArray which house to build
+     */
+    public void placeHouses(int indexInArray){
+        forMap = 0;
+        switch (indexInArray){
+            case 0:
+                gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
+                gp.objects[forMap][counterInObject].worldX = 22 * gp.tileSize;
+                gp.objects[forMap][counterInObject].worldY = 18 * gp.tileSize;
+                counterInObject++;
+                break;
+            case 1:
+                gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
+                gp.objects[forMap][counterInObject].worldX = 10 * gp.tileSize;
+                gp.objects[forMap][counterInObject].worldY = 25 * gp.tileSize;
+                counterInObject++;
+                break;
+            case 2:
+                gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
+                gp.objects[forMap][counterInObject].worldX = 13 * gp.tileSize;
+                gp.objects[forMap][counterInObject].worldY = 30 * gp.tileSize;
+                counterInObject++;
+                break;
+            case 3:
+                gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
+                gp.objects[forMap][counterInObject].worldX = 11 * gp.tileSize;
+                gp.objects[forMap][counterInObject].worldY = 16 * gp.tileSize;
+                counterInObject++;
+                break;
         }
     }
 }

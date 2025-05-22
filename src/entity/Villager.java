@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.GameState;
+import main.ItemType;
 import object.*;
 
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ public class Villager extends Entity {
     public HashMap<Entity, String[]> requireForHouse = new HashMap<>();
     public int indexInArray = 0;
     public int curValLog, curValWheat, curValStone, curValClay;
+    public boolean isDoneLog, isDoneWheat, isDoneStone, isDoneClay = false;
 
     public Villager(GamePanel gp, VillagerType type) {
         super(gp);
@@ -38,6 +40,10 @@ public class Villager extends Entity {
         right2 = setUpImage("/NPC/right2" + typeOfVillager + "Villager", gp.tileSize, gp.tileSize);
     }
 
+    /**
+     * Sets dialogue based on villagers' type
+     * @param typeOfVillager type of villager
+     */
     public void setDialogue(String typeOfVillager) {
         switch (typeOfVillager) {
             case "Seller" ->
@@ -56,7 +62,6 @@ public class Villager extends Entity {
 
     public void action() {
         counterForEntityMovement++;
-
         if (counterForEntityMovement == 90) {
             Random rd = new Random();
             int index = rd.nextInt(4);
@@ -66,18 +71,14 @@ public class Villager extends Entity {
         }
     }
 
+    /**
+     * Sets items a villager is selling/player can buy from him.
+     *
+     * @param typeOfVillager Type of villager (Seller, Builder, Smith)
+     */
     public void setItems(String typeOfVillager) {
         switch (typeOfVillager) {
-            case "Seller": {
-                inventory.clear();
-                inventory.add(new ObjWheat(gp));
-                inventory.add(new ObjClay(gp));
-                inventory.add(new ObjStone(gp));
-                inventory.add(new ObjLog(gp));
-                inventory.add(new ObjCoin(gp));
-                break;
-            }
-            case "Builder": {
+            case "Seller", "Builder": {
                 inventory.clear();
                 inventory.add(new ObjWheat(gp));
                 inventory.add(new ObjClay(gp));
@@ -102,6 +103,9 @@ public class Villager extends Entity {
         }
     }
 
+    /**
+     * Sets values in a Hashmap. Could've been solved better.
+     */
     public void valuesForHouse() {
         try {
             BufferedReader br = new BufferedReader(new FileReader("valuesForHouse.txt"));
@@ -119,6 +123,119 @@ public class Villager extends Entity {
             }
         } catch (IOException i) {
             System.err.println(i.getMessage());
+        }
+    }
+
+    /**
+     * Sets 'prizes' of houses.
+     */
+    public void setKeySet() {
+        for (Entity key : requireForHouse.keySet()) {
+            gp.ui.uiTrading.values = requireForHouse.get(key);
+            switch (key.name) {
+                case "log":
+                    curValLog = Integer.parseInt(gp.ui.uiTrading.values[indexInArray]);
+                    break;
+                case "wheat":
+                    curValWheat = Integer.parseInt(gp.ui.uiTrading.values[indexInArray]);
+                    break;
+                case "clay":
+                    curValClay = Integer.parseInt(gp.ui.uiTrading.values[indexInArray]);
+                    break;
+                case "stone":
+                    curValStone = Integer.parseInt(gp.ui.uiTrading.values[indexInArray]);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Logic of giving items to builder. This method is messy, but it works.
+     */
+    public void builderSell() {
+        gp.ui.uiTrading.x = gp.tileSize * 2;
+        gp.ui.uiTrading.y = gp.tileSize;
+        gp.ui.uiTrading.width = gp.tileSize * 6;
+        gp.ui.uiTrading.height = gp.tileSize * 5;
+        gp.ui.ut.drawPopUpWindow(gp.ui.uiTrading.x, gp.ui.uiTrading.y, gp.ui.uiTrading.width, gp.ui.uiTrading.height);
+        gp.ui.uiTrading.y -= gp.tileSize / 2;
+
+        gp.ui.uiTrading.soutKeySet();
+
+        if (gp.keyH.cPressed) {
+            int indexItem = gp.ui.ut.getItemIndexInInventory(gp.ui.slotColPlayer, gp.ui.slotRowPlayer);
+            try {
+                if (gp.player.inventory.get(indexItem) != null) {
+                    if (gp.player.inventory.get(indexItem) == gp.player.currentTool) {
+                        gp.ui.ut.goToPlayState("You can't sell your current\nweapon");
+                    } else {
+                        if (gp.player.inventory.get(indexItem).typeOfItem.equals(ItemType.MATERIAL)) {
+                            switch (gp.player.inventory.get(indexItem).name) {
+                                case "log": {
+                                    if (gp.ui.villager.curValLog <= 0 ||
+                                            (gp.ui.villager.curValLog - gp.player.inventory.get(indexItem).howManyOfItem <= 0)) {
+                                        gp.player.inventory.get(indexItem).howManyOfItem -= gp.ui.villager.curValLog;
+                                        isDoneLog = true;
+                                        gp.ui.villager.curValLog = 0;
+                                        break;
+                                    }
+                                    gp.ui.villager.curValLog -= gp.player.inventory.get(indexItem).howManyOfItem;
+                                    gp.player.inventory.remove(indexItem);
+                                    break;
+                                }
+                                case "wheat":
+                                    if (gp.ui.villager.curValWheat <= 0 ||
+                                            (gp.ui.villager.curValWheat - gp.player.inventory.get(indexItem).howManyOfItem <= 0)) {
+                                        gp.player.inventory.get(indexItem).howManyOfItem -= gp.ui.villager.curValWheat;
+                                        isDoneWheat = true;
+                                        gp.ui.villager.curValWheat = 0;
+                                        break;
+                                    }
+                                    gp.ui.villager.curValWheat -= gp.player.inventory.get(indexItem).howManyOfItem;
+                                    gp.player.inventory.remove(indexItem);
+                                    break;
+                                case "clay":
+                                    if (gp.ui.villager.curValClay <= 0 ||
+                                            (gp.ui.villager.curValClay - gp.player.inventory.get(indexItem).howManyOfItem <= 0)) {
+                                        gp.player.inventory.get(indexItem).howManyOfItem -= gp.ui.villager.curValClay;
+                                        isDoneClay = true;
+                                        gp.ui.villager.curValClay = 0;
+                                        break;
+                                    }
+                                    gp.ui.villager.curValClay -= gp.player.inventory.get(indexItem).howManyOfItem;
+                                    gp.player.inventory.remove(indexItem);
+                                    break;
+                                case "stone":
+                                    if (gp.ui.villager.curValStone <= 0 ||
+                                            (gp.ui.villager.curValStone - gp.player.inventory.get(indexItem).howManyOfItem <= 0)) {
+                                        gp.player.inventory.get(indexItem).howManyOfItem -= gp.ui.villager.curValStone;
+                                        isDoneStone = true;
+                                        gp.ui.villager.curValStone = 0;
+                                        break;
+                                    }
+                                    gp.ui.villager.curValStone -= gp.player.inventory.get(indexItem).howManyOfItem;
+                                    gp.player.inventory.remove(indexItem);
+
+                                    break;
+                            }
+                            if (isDoneLog && isDoneWheat && isDoneClay && isDoneStone) {
+                                gp.plSetter.placeHouses(indexInArray);
+                                gp.ui.villager.indexInArray++;
+                                gp.ui.villager.setKeySet();
+                                isDoneLog = false;
+                                isDoneWheat = false;
+                                isDoneStone = false;
+                                isDoneClay = false;
+                            }
+                        } else {
+                            gp.ui.ut.goToPlayState("You can't build house\nfrom this");
+                        }
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                gp.ui.ut.goToPlayState("You can't sell nothing.");
+            }
+            gp.keyH.cPressed = false;
         }
     }
 }

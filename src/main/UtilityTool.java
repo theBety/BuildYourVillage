@@ -93,4 +93,11 @@ public class UtilityTool {
         gp.ui.ut.drawPopUpWindow(x, y, width, height);
         gp.ui.g2.drawString("Coins: " + gp.player.coins, x + 24, y + 60);
     }
+
+    public void goToPlayState(String message){
+        gp.ui.commandNum = 0;
+        gp.ui.tradingState = 0;
+        gp.gameState = GameState.DIALOGUE;
+        gp.ui.currentDialogue = message;
+    }
 }
