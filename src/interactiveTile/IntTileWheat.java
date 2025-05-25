@@ -9,7 +9,7 @@ public class IntTileWheat extends InteractiveTile{
     GamePanel gp;
 
     public IntTileWheat(GamePanel gp, int col, int row) {
-        super(gp,col,row);
+        super(gp);
         this.gp = gp;
 
         this.worldX = gp.tileSize * col;
@@ -23,9 +23,5 @@ public class IntTileWheat extends InteractiveTile{
 
     public boolean isRequiredItem(Entity entity){
         return entity.currentTool.typeOfItem == ItemType.HOE;
-    }
-
-    public void playSoundEffect(){
-        //pridat sound effect
     }
 }

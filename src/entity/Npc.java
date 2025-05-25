@@ -41,8 +41,13 @@ public class Npc extends Entity {
     }
 
     public void setDialouge() {
-        dialogues[0] = "HI!! How can i help you?";
-        dialogues[1] = "You seem lost. I'll explain you everything.\nYou're here in our little world.";
+        dialogues[0] = """
+                HI!! How can I help you?
+                You seem lost. I'll explain you everything.
+                You're here in our little world.""";
+        dialogues[1] = "We've been living here for over a decade\nbut one night all of our houses\nburned down.";
+        dialogues[2] = "We need your help. Could you help us\nbuild our homes back?";
+        dialogues[3] = "There's a guy named builder Tom, he used\nto be an architect. He's going to help you.";
     }
 
     public void speak(){

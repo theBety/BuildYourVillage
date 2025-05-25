@@ -9,7 +9,7 @@ public class IntTileStone extends InteractiveTile{
     GamePanel gp;
 
     public IntTileStone(GamePanel gp, int col, int row) {
-        super(gp,col,row);
+        super(gp);
         this.gp = gp;
 
         this.worldX = gp.tileSize * col;
@@ -23,9 +23,5 @@ public class IntTileStone extends InteractiveTile{
 
     public boolean isRequiredItem(Entity entity){
         return entity.currentTool.typeOfItem == ItemType.PICAXE;
-    }
-
-    public void playSoundEffect(){
-        //gp.playSoundEffect(2);
     }
 }

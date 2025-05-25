@@ -10,6 +10,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class GamePanel extends JPanel implements Runnable {
     //Screen settings
@@ -28,9 +31,9 @@ public class GamePanel extends JPanel implements Runnable {
     public KeyHandler keyH = new KeyHandler(this);
     public CheckCollision checkCollision = new CheckCollision(this);
     public TileManager tm = new TileManager(this);
+    public UI ui = new UI(this);
     public Player player = new Player(this, keyH);
     public PlacingSetter plSetter = new PlacingSetter(this);
-    public UI ui = new UI(this);
     public EventManager eventManager = new EventManager(this);
     public SoundManager soundMusic = new SoundManager();
     public SoundManager soundEffects = new SoundManager();
@@ -39,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity[][] npc = new Entity[maxMap][10];
     public InteractiveTile[][] iTile = new InteractiveTile[maxMap][500];
     ArrayList<Entity> entitiesAndObjects = new ArrayList<>();
+    ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     //World settings
     public final int maxWorldCol = 50;
@@ -52,7 +56,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
-        //this.playSound(0);
+        this.playSound(0);
+        startTimerStart();
     }
 
     /**
@@ -102,7 +107,9 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         if (gameState.equals(GameState.PLAYING)) {
             player.update();
-
+            if(player.endGame){
+                gameState = GameState.END;
+            }
             for (Entity entity : npc[currentMap]) {
                 if (entity != null) {
                     entity.update();
@@ -181,10 +188,6 @@ public class GamePanel extends JPanel implements Runnable {
         soundMusic.loop();
     }
 
-    public void stopMusic() {
-        soundMusic.stopSound();
-    }
-
     /**
      * Plays sound effect
      *
@@ -193,5 +196,26 @@ public class GamePanel extends JPanel implements Runnable {
     public void playSoundEffect(int index) {
         soundEffects.setFile(index);
         soundEffects.play();
+    }
+
+    /**
+     * These 3 methods take care of ores so they're refreshing after one minute.
+     * ScheduledExecutorService - runs method periodically after a certain time (60 seconds),
+     * and runs it on a different thread.
+     */
+    public void startTimerStart(){
+        startTimer();
+    }
+
+    private void startTimer(){
+        scheduler.scheduleAtFixedRate(this::loopAction, 0, 60, TimeUnit.SECONDS);
+    }
+
+    private void loopAction() {
+        plSetter.setInteractiveTile();
+    }
+
+    public void endGameTimer(){
+        scheduler.shutdown();
     }
 }

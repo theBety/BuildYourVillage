@@ -37,6 +37,9 @@ public class EventManager {
 
     }
 
+    /**
+     * Checks if player is least one tile away form
+     */
     public void checkEvent() {
         int xDistance = Math.abs(gp.player.worldX - previousEventX);
         int yDistance = Math.abs(gp.player.worldY - previousEventY);
@@ -46,7 +49,13 @@ public class EventManager {
         }
         if (canEventHappen) {
             if (isEventHappening(0, 21, 19, "any")) {
-                teleport(1, 21, 25);
+                if(gp.plSetter.activePath0) teleport(1, 22, 25);
+            } else if (isEventHappening(0, 27, 19, "any")) {
+                if(gp.plSetter.activePath1) teleport(0, 22, 25);
+            } else if (isEventHappening(0, 12, 18, "any")) {
+                if(gp.plSetter.activePath2) teleport(0, 22, 25);
+            } else if (isEventHappening(0, 16, 22, "any")) {
+                if(gp.plSetter.activePath3) teleport(0, 22, 25);
             } else if (isEventHappening(1, 21, 25, "any")) {
                 teleport(0, 21, 19);
             }
@@ -55,7 +64,6 @@ public class EventManager {
 
     /**
      * Basically returns if solid areas of player and tiles are in collision.
-     *
      * @param col          - colon where the tile is placed
      * @param row          - row where the tile is placed
      * @param reqDirection - If I want player to be in specific direction - that's that parameter.
@@ -77,7 +85,6 @@ public class EventManager {
                     isEventHappening = true;
                 }
             }
-
             gp.player.solidArea.x = gp.player.solidAreaDefaultX;
             gp.player.solidArea.y = gp.player.solidAreaDefaultY;
             eventRect[map][col][row].x = eventRect[map][col][row].eventRectDefaultX;
@@ -96,5 +103,4 @@ public class EventManager {
         previousEventX = gp.player.worldX;
         previousEventY = gp.player.worldY;
     }
-
 }

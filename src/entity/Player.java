@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 public class Player extends Entity {
     KeyHandler keyH;
     public final int screenX, screenY;
+    public boolean endGame = false;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -26,39 +27,6 @@ public class Player extends Entity {
         getPlayerImage();
         getAttackImages();
         setDefaultItems();
-    }
-
-    public void setValues() {
-        worldX = gp.tileSize * 23;
-        worldY = gp.tileSize * 21;
-
-        speed = 4;
-        direction = "down";
-        coins = 50;
-        currentTool = new ToolAxe(gp, 3);
-        strength = 1;
-        attack = getAttack();
-        level = 1;
-        exp = 0;
-        expToNextLevel = 40;
-        //currentBoots = new boty;
-    }
-
-    public void setDefaultItems() {
-        inventory.add(currentTool);
-        inventory.add(new ObjKey(gp));
-        inventory.add(new ToolAxe(gp, 3));
-        inventory.add(new ToolAxe(gp, 2));
-        inventory.add(new ToolAxe(gp, 1));
-        inventory.add(new ToolPicaxe(gp, 1));
-        inventory.add(new ToolPicaxe(gp, 2));
-        inventory.add(new ToolPicaxe(gp, 3));
-        inventory.add(new ToolHoe(gp, 2));
-    }
-
-    public int getAttack() {
-        attackArea = currentTool.attackArea;
-        return attack = strength * currentTool.attackValue;
     }
 
     /**
@@ -110,6 +78,39 @@ public class Player extends Entity {
         }
     }
 
+    public void setValues() {
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
+
+        speed = 4;
+        direction = "down";
+        coins = 50;
+        currentTool = new ToolAxe(gp, 3);
+        strength = 1;
+        attack = getAttack();
+        level = 1;
+        exp = 0;
+        expToNextLevel = 40;
+        //currentBoots = new boty;
+    }
+
+    public void setDefaultItems() {
+        inventory.add(currentTool);
+        inventory.add(new ObjKey(gp));
+        inventory.add(new ToolAxe(gp, 3));
+        inventory.add(new ToolAxe(gp, 2));
+        inventory.add(new ToolAxe(gp, 1));
+        inventory.add(new ToolPicaxe(gp, 1));
+        inventory.add(new ToolPicaxe(gp, 2));
+        inventory.add(new ToolPicaxe(gp, 3));
+        inventory.add(new ToolHoe(gp, 2));
+    }
+
+    public int getAttack() {
+        attackArea = currentTool.attackArea;
+        return attack = strength * currentTool.attackValue;
+    }
+
     /**
      * Based on what key is pressed, the player moves to some direction.
      * Then, the program checks if there's a collision happening.
@@ -123,30 +124,26 @@ public class Player extends Entity {
             exp = 0;
             expToNextLevel *= 2;
             strength += 1;
+            String text = "You achieved level " + level + "!";
+            gp.ui.addMessage(text);
         }
+        if (gp.plSetter.activePath0 && gp.plSetter.activePath1 && gp.plSetter.activePath2 && gp.plSetter.activePath3)
+            endGame = true;
         if (attacking) {
             attack();
         } else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-            if (keyH.upPressed) {
-                direction = "up";
-            } else if (keyH.downPressed) {
-                direction = "down";
-            } else if (keyH.leftPressed) {
-                direction = "left";
-            } else {
-                direction = "right";
-            }
+            if (keyH.upPressed) direction = "up";
+            else if (keyH.downPressed) direction = "down";
+            else if (keyH.leftPressed) direction = "left";
+            else direction = "right";
             collisionOn = false;
             gp.checkCollision.checkTile(this);
 
             int objectIndex = gp.checkCollision.checkObject(this, true);
             pickUpObject(objectIndex);
-
             int npcIndex = gp.checkCollision.checkEntity(this, gp.npc);
             interactWithNpc(npcIndex);
-
             gp.eventManager.checkEvent();
-
             gp.checkCollision.checkEntity(this, gp.iTile);
 
             gp.keyH.spacePressed = false;
@@ -168,16 +165,18 @@ public class Player extends Entity {
             }
             spriteCounter++;
             if (spriteCounter > 13) {
-                if (spriteNumber == 1) {
-                    spriteNumber = 2;
-                } else if (spriteNumber == 2) {
-                    spriteNumber = 1;
-                }
+                if (spriteNumber == 1) spriteNumber = 2;
+                else if (spriteNumber == 2) spriteNumber = 1;
+
                 spriteCounter = 0;
             }
         }
     }
 
+    /**
+     * Checks if player can pick up an item
+     * @param index index of item player wants to pick up
+     */
     public void pickUpObject(int index) {
         String text;
 
@@ -185,22 +184,18 @@ public class Player extends Entity {
             if (gp.objects[gp.currentMap][index].typeOfItem.equals(ItemType.PICKUP)) {
                 gp.objects[gp.currentMap][index].useObject(this);
                 gp.objects[gp.currentMap][index] = null;
+                gp.playSoundEffect(3);
             } else if (gp.objects[gp.currentMap][index].typeOfItem.equals(ItemType.OBSTACLE)) {
-                if (keyH.enterPressed) {
-                    gp.objects[gp.currentMap][index].interact();
-                }
+                if (keyH.enterPressed) gp.objects[gp.currentMap][index].interact();
                 keyH.enterPressed = false;
             } else {
                 if (canStackItem(gp.objects[gp.currentMap][index])) {
-                    //play sound effect
+                    gp.playSoundEffect(3);
                     text = "You picked up a " + gp.objects[gp.currentMap][index].name + "!";
                     exp += 3;
                     gp.objects[gp.currentMap][index] = null;
-                } else if (gp.objects[gp.currentMap][index].collisionObject) {
-                    text = null;
-                } else {
-                    text = "You can't carry more objects :(";
-                }
+                } else if (gp.objects[gp.currentMap][index].collisionObject) text = null;
+                else text = "You can't carry more objects :(";
                 gp.ui.addMessage(text);
             }
         }
@@ -211,9 +206,7 @@ public class Player extends Entity {
             gp.gameState = GameState.DIALOGUE;
             gp.npc[gp.currentMap][i].speak();
         } else {
-            if (gp.keyH.spacePressed) {
-                attacking = true;
-            }
+            if (gp.keyH.spacePressed) attacking = true;
         }
     }
 
@@ -222,9 +215,7 @@ public class Player extends Entity {
      */
     public void attack() {
         spriteCounter++; //to do animations
-        if (spriteCounter <= 5) {
-            spriteNumber = 1;
-        }
+        if (spriteCounter <= 5) spriteNumber = 1;
         if (spriteCounter > 5 && spriteCounter <= 25) {
             spriteNumber = 2;
             //save info
@@ -296,11 +287,8 @@ public class Player extends Entity {
             }
             if (selectedItem.typeOfItem == ItemType.MATERIAL) {
                 if (selectedItem.useObject(this)) {
-                    if (selectedItem.howManyOfItem > 1) {
-                        selectedItem.howManyOfItem--;
-                    } else {
-                        inventory.remove(itemIndex);
-                    }
+                    if (selectedItem.howManyOfItem > 1) selectedItem.howManyOfItem--;
+                    else inventory.remove(itemIndex);
                 }
             }
         }
@@ -310,11 +298,9 @@ public class Player extends Entity {
         int adding;
         boolean canStackItem = false;
         if (!item.collisionObject) {
-            if(gp.gameState == GameState.PLAYING){
-                adding = 3;
-            }else{
-                adding = 1;
-            }
+            if (gp.gameState == GameState.PLAYING) adding = 3;
+            else adding = 1;
+
             if (item.isStackable) {
                 int index = utilityTool.findItemInInventory(item.name);
                 if (index != -1) {
@@ -331,9 +317,7 @@ public class Player extends Entity {
                     }
                 }
             } else {
-                if (inventory.size() != inventoryCapacity) {
-                    inventory.add(item);
-                }
+                if (inventory.size() != inventoryCapacity) inventory.add(item);
             }
         }
         return canStackItem;
@@ -346,90 +330,48 @@ public class Player extends Entity {
         switch (direction) {
             case "up":
                 if (!attacking) {
-                    if (spriteNumber == 1) {
-                        image = up1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = up2;
-                    }
+                    if (spriteNumber == 1) image = up1;
+                    if (spriteNumber == 2) image = up2;
                 }
                 if (attacking) {
                     tempScreenX = screenX - gp.tileSize;
-                    if (spriteNumber == 1) {
-                        image = up1Axe1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = up1Axe2;
-                    }
+                    if (spriteNumber == 1) image = up1Axe1;
+                    if (spriteNumber == 2) image = up1Axe2;
                 }
                 break;
             case "down":
                 if (!attacking) {
-                    if (spriteNumber == 1) {
-                        image = down1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = down2;
-                    }
+                    if (spriteNumber == 1) image = down1;
+                    if (spriteNumber == 2) image = down2;
                 }
                 if (attacking) {
                     tempScreenX = screenX - gp.tileSize;
-                    if (spriteNumber == 1) {
-                        image = down1Axe1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = down1Axe2;
-                    }
+                    if (spriteNumber == 1) image = down1Axe1;
+                    if (spriteNumber == 2) image = down1Axe2;
                 }
                 break;
             case "left":
                 if (!attacking) {
-                    if (spriteNumber == 1) {
-                        image = left1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = left2;
-                    }
+                    if (spriteNumber == 1) image = left1;
+                    if (spriteNumber == 2) image = left2;
                 }
                 if (attacking) {
                     tempScreenX = screenX - gp.tileSize;
-                    if (spriteNumber == 1) {
-                        image = left1Axe1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = left1Axe2;
-                    }
+                    if (spriteNumber == 1) image = left1Axe1;
+                    if (spriteNumber == 2) image = left1Axe2;
                 }
                 break;
             case "right":
                 if (!attacking) {
-                    if (spriteNumber == 1) {
-                        image = right1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = right2;
-                    }
+                    if (spriteNumber == 1) image = right1;
+                    if (spriteNumber == 2) image = right2;
                 }
                 if (attacking) {
-                    if (spriteNumber == 1) {
-                        image = right1Axe1;
-                    }
-                    if (spriteNumber == 2) {
-                        image = right1Axe2;
-                    }
+                    if (spriteNumber == 1) image = right1Axe1;
+                    if (spriteNumber == 2) image = right1Axe2;
                 }
                 break;
         }
-
         g2.drawImage(image, tempScreenX, screenY, null);
     }
 }
-/*
-String objectName = gp.objects[index].name;
-            switch (objectName) {
-                case "key":
-                    gp.objects[index] = null;
-                    gp.ui.printMessage("You picked up key"); //prints message on a screen.
-                    Break;
-            }
- */

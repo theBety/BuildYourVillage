@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 public abstract class Entity {
@@ -92,7 +91,6 @@ public abstract class Entity {
 
     public boolean useObject(Entity e) {
         return false;
-        //video 28
     }
 
     public void dropItem(Entity droppedItem) {
@@ -163,11 +161,9 @@ public abstract class Entity {
         }
     }
 
-    public void interact() {
-    }
+    public void interact() {}
 
-    public void interact2() {
-    }
+    public void interact2() {}
 
     /**
      * Check if there's any object around entity (in most cases player). Checks if col and row of objects are
@@ -258,16 +254,8 @@ public abstract class Entity {
         return worldX + solidArea.x;
     }
 
-    public int getRightX() {
-        return worldX + solidArea.x + solidArea.width;
-    }
-
     public int getTopY() {
         return worldY + solidArea.y;
-    }
-
-    public int getBottomY() {
-        return worldY + solidArea.y + solidArea.height;
     }
 
     public int getCol() {

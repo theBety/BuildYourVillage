@@ -30,5 +30,4 @@ public class ObjKey extends Entity {
             return false;
         }
     }
-
 }

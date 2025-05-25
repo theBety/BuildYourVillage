@@ -91,4 +91,21 @@ public class UITitleScreen {
             System.err.println("IO Exception help");
         }
     }
+
+    /**
+     * Draws game over screen
+     */
+    public void drawGameOverScreen() {
+        ui.g2.setColor(new Color(205, 173, 171, 210));
+        ui.g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        String text = "YOU'VE FINISHED THE GAME";
+        ui.g2.setFont(ui.bookMan.deriveFont(Font.BOLD, 90));
+        int x = ui.ut.xForCenteredText(text);
+        int y = gp.screenHeight / 2;
+        ui.g2.drawString(text, x, y);
+        text = "Your time is: " + ui.formatTime.format(ui.playTime) + " seconds";
+        x = ui.ut.xForCenteredText(text);
+        y = gp.screenHeight / 2 + (gp.tileSize * 2);
+        ui.g2.drawString(text, x, y);
+    }
 }

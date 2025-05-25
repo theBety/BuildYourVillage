@@ -6,7 +6,7 @@ import java.net.URL;
 
 public class SoundManager {
     Clip video;
-    URL soundURL[] = new URL[30];
+    URL[] soundURL = new URL[10];
     FloatControl fc;
     public int volumeScale = 5;//0-10
     float volume;
@@ -16,6 +16,8 @@ public class SoundManager {
         soundURL[0] = getClass().getResource("/sound/backgroundSong.wav");
         soundURL[1] = getClass().getResource("/sound/selectInInventory.wav");
         soundURL[2] = getClass().getResource("/sound/cutTree.wav");
+        soundURL[3] = getClass().getResource("/sound/pickupItem.wav");
+        soundURL[4] = getClass().getResource("/sound/buyHouse.wav");
     }
 
     /**
@@ -41,10 +43,6 @@ public class SoundManager {
 
     public void loop() {
         video.loop(Clip.LOOP_CONTINUOUSLY);
-    }
-
-    public void stopSound() {
-        video.stop();
     }
 
     public void volume() {
@@ -83,6 +81,6 @@ public class SoundManager {
                 volume = 6f;
                 break;
         }
-        fc.setValue(volume); //vyjimka kdyz jdu z how to play do playing statu
+        fc.setValue(volume);
     }
 }

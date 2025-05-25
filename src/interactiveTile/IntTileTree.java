@@ -9,7 +9,7 @@ public class IntTileTree extends InteractiveTile{
     GamePanel gp;
 
     public IntTileTree(GamePanel gp, int col, int row) {
-        super(gp,col,row);
+        super(gp);
         this.gp = gp;
         dropItem = new ObjLog(gp);
         this.worldX = gp.tileSize * col;

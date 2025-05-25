@@ -54,7 +54,7 @@ public class UITrading {
         if (ui.commandNum == 2) {
             ui.g2.drawString("*", x - 20, y + 5);
             if (gp.keyH.enterPressed) {
-                ui.ut.goToPlayState("See you nex time!");
+                ui.ut.goToPlayState("See you next time!");
                 gp.keyH.enterPressed = false;
             }
         }

@@ -2,6 +2,7 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, rightPressed, leftPressed, spacePressed, enterPressed, cPressed;
@@ -129,6 +130,7 @@ public class KeyHandler implements KeyListener {
             }
             if (gp.ui.commandNum == 1 && gp.soundEffects.volumeScale < 10) {
                 gp.soundEffects.volumeScale++;
+                gp.soundMusic.volume();
             }
         }
         if (code == KeyEvent.VK_A) {
@@ -138,14 +140,17 @@ public class KeyHandler implements KeyListener {
             }
             if (gp.ui.commandNum == 1 && gp.soundEffects.volumeScale > 0) {
                 gp.soundEffects.volumeScale--;
+                gp.soundMusic.volume();
             }
         }
         if (code == KeyEvent.VK_ENTER) {
             if (gp.ui.commandNum == 2) gp.gameState = GameState.TUTORIAL;
             if (gp.ui.commandNum == 3) {
                 System.out.println("Game ended successfully");
+                gp.endGameTimer();
                 System.exit(1);
             }
+            if (gp.ui.commandNum == 4) gp.gameState = GameState.PLAYING;
         }
 
     }

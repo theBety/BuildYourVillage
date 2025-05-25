@@ -17,6 +17,7 @@ public class PlacingSetter {
     GamePanel gp;
     int counterInObject = 0;
     int forMap;
+    public boolean activePath0, activePath1, activePath2, activePath3 = false;
 
     public PlacingSetter(GamePanel gp) {
         this.gp = gp;
@@ -41,11 +42,6 @@ public class PlacingSetter {
         gp.objects[forMap][counterInObject] = new ObjCoin(gp);
         gp.objects[forMap][counterInObject].worldX = 21 * gp.tileSize;
         gp.objects[forMap][counterInObject].worldY = 25 * gp.tileSize;
-        counterInObject++;
-
-        gp.objects[forMap][counterInObject] = new ObjChest(gp, new ToolAxe(gp, 2));
-        gp.objects[forMap][counterInObject].worldX = 17 * gp.tileSize;
-        gp.objects[forMap][counterInObject].worldY = 18 * gp.tileSize;
         counterInObject++;
 
         forMap = 1;
@@ -147,28 +143,32 @@ public class PlacingSetter {
         forMap = 0;
         switch (indexInArray){
             case 0:
-                gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
+                gp.objects[forMap][counterInObject] = new ObjPinkHouse(gp);
                 gp.objects[forMap][counterInObject].worldX = 22 * gp.tileSize;
                 gp.objects[forMap][counterInObject].worldY = 18 * gp.tileSize;
                 counterInObject++;
+                activePath0 = true;
                 break;
             case 1:
                 gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
-                gp.objects[forMap][counterInObject].worldX = 10 * gp.tileSize;
-                gp.objects[forMap][counterInObject].worldY = 25 * gp.tileSize;
+                gp.objects[forMap][counterInObject].worldX = 28 * gp.tileSize;
+                gp.objects[forMap][counterInObject].worldY = 18 * gp.tileSize;
                 counterInObject++;
+                activePath1 = true;
                 break;
             case 2:
-                gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
+                gp.objects[forMap][counterInObject] = new ObjPinkHouse(gp);
                 gp.objects[forMap][counterInObject].worldX = 13 * gp.tileSize;
-                gp.objects[forMap][counterInObject].worldY = 30 * gp.tileSize;
+                gp.objects[forMap][counterInObject].worldY = 17 * gp.tileSize;
                 counterInObject++;
+                activePath2 = true;
                 break;
             case 3:
                 gp.objects[forMap][counterInObject] = new ObjPurpleHouse(gp);
-                gp.objects[forMap][counterInObject].worldX = 11 * gp.tileSize;
-                gp.objects[forMap][counterInObject].worldY = 16 * gp.tileSize;
+                gp.objects[forMap][counterInObject].worldX = 17 * gp.tileSize;
+                gp.objects[forMap][counterInObject].worldY = 21 * gp.tileSize;
                 counterInObject++;
+                activePath3 = true;
                 break;
         }
     }

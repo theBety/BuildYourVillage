@@ -50,7 +50,7 @@ public class Villager extends Entity {
                     dialogues[0] = "Hi! I'm your new best friend!\nI can sell you any material\nyou could need!";
             case "Builder" ->
                     dialogues[0] = "If you have all the materials,\ncome to me and we can build\nthis village together!";
-            case "Smith" -> dialogues[0] = "Mining takes long time doesn't it?\n Well i can help you with that!";
+            case "Smith" -> dialogues[0] = "Mining takes long time doesn't it?\n Well I can help you with that!";
         }
     }
 
@@ -220,6 +220,7 @@ public class Villager extends Entity {
                             }
                             if (isDoneLog && isDoneWheat && isDoneClay && isDoneStone) {
                                 gp.plSetter.placeHouses(indexInArray);
+                                gp.playSoundEffect(4);
                                 gp.ui.villager.indexInArray++;
                                 gp.ui.villager.setKeySet();
                                 isDoneLog = false;
