@@ -94,6 +94,10 @@ public class UtilityTool {
         gp.ui.g2.drawString("Coins: " + gp.player.coins, x + 24, y + 60);
     }
 
+    /**
+     * When player presses button to go back to game, or player just needs to go back to game, this method is called.
+     * @param message what player messed up for example. What message will be printed on a screen
+     */
     public void goToPlayState(String message){
         gp.ui.commandNum = 0;
         gp.ui.tradingState = 0;

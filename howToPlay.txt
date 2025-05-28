@@ -4,8 +4,8 @@ How? You need to collect materials such as wood,
 stone or wheat to build houses.
 Controls:
 W, S, A, D - moving
-N - End conversation with a NPC.
-E - Inventory
+ESC - End conversation with the NPC
+E - Open/close Inventory
 R - Pause game
 SHIFT - Settings
 SPACE - Break

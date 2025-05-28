@@ -95,6 +95,12 @@ public class EventManager {
         return isEventHappening;
     }
 
+    /**
+     * For path tile - changes player current location on a map.
+     * @param mapNum to what map is player being teleported (0 - overworld, 1 - house)
+     * @param col col in a map
+     * @param row row in a map.
+     */
     public void teleport(int mapNum, int col, int row) {
         gp.currentMap = mapNum;
         gp.player.worldX = gp.tileSize * col;

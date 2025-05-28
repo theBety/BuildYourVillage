@@ -56,6 +56,11 @@ public class TileManager {
         }
     }
 
+    /**
+     * Reads a map file and adds the numbers to a map 3D array
+     * @param path path to file
+     * @param map With what map is the program dealing with
+     */
     public void createMaps(String path, int map) {
         try {
             InputStream is = getClass().getResourceAsStream(path);

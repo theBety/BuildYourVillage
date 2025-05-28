@@ -44,6 +44,11 @@ public class InteractiveTile extends Entity {
         }
     }
 
+    /**
+     * What tool is required for the tile to be destroyed
+     * @param entity What tile is player trying to break
+     * @return if the tool is correct or not
+     */
     public boolean isRequiredItem(Entity entity) {
         return false;
     }

@@ -201,6 +201,10 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Chooses current dialogue, then calls speak() method
+     * @param i index of entity player bumped into
+     */
     public void interactWithNpc(int i) {
         if (i != -1) {
             gp.gameState = GameState.DIALOGUE;
@@ -211,7 +215,7 @@ public class Player extends Entity {
     }
 
     /**
-     * Attacking animation
+     * Attack animation
      */
     public void attack() {
         spriteCounter++; //to do animations
@@ -256,6 +260,10 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Damage interactive tile - ores and trees.
+     * @param index the tile player is breaking.
+     */
     public void damageInteractiveTile(int index) {
         if (index != -1 && gp.iTile[gp.currentMap][index].isDestructible && gp.iTile[gp.currentMap][index].isRequiredItem(this)
                 && !gp.iTile[gp.currentMap][index].isInvincible) {
@@ -294,6 +302,12 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * This method manages stacking items - if item type is material
+     * and the item is already in the inventory, its counter increases by one
+     * @param item with what item is method working with.
+     * @return if item can be stacked or not
+     */
     public boolean canStackItem(Entity item) {
         int adding;
         boolean canStackItem = false;

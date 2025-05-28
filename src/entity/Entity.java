@@ -89,10 +89,19 @@ public abstract class Entity {
     public void action() {
     }
 
+    /**
+     * If item can be used, method is override in different class.
+     * @param e object player is trying to use
+     * @return if a player can use that item
+     */
     public boolean useObject(Entity e) {
         return false;
     }
 
+    /**
+     * If there's room in objects, item will be added, then drawn in update method.
+     * @param droppedItem item which is dropped (for example, log for a tree etc.)
+     */
     public void dropItem(Entity droppedItem) {
         for (int i = 0; i < gp.objects.length; i++) {
             if (gp.objects[gp.currentMap][i] == null) {
