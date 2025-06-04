@@ -3,9 +3,8 @@ package UserInterface;
 import main.GamePanel;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.Objects;
 
 public class UITitleScreen {
     GamePanel gp;
@@ -62,7 +61,8 @@ public class UITitleScreen {
 
         ui.g2.setFont(ui.bookMan.deriveFont(Font.BOLD, 30));
         try {
-            BufferedReader br = new BufferedReader(new FileReader("howToPlay.txt"));
+            InputStream is = getClass().getResourceAsStream("/files/howToPlay.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)));
             int helpInt = 1;
             int x;
             int y;

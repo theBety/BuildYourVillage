@@ -5,10 +5,9 @@ import main.GameState;
 import main.ItemType;
 import object.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 public class Villager extends Entity {
@@ -108,7 +107,8 @@ public class Villager extends Entity {
      */
     public void valuesForHouse() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("valuesForHouse.txt"));
+            InputStream is = getClass().getResourceAsStream("/files/valuesForHouse.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)));
             String line;
             Entity[] objects = new Entity[4];
             objects[0] = new ObjLog(gp);

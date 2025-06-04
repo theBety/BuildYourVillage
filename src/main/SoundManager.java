@@ -16,7 +16,7 @@ public class SoundManager {
         soundURL[0] = getClass().getResource("/sound/backgroundSong.wav");
         soundURL[1] = getClass().getResource("/sound/selectInInventory.wav");
         soundURL[2] = getClass().getResource("/sound/cutTree.wav");
-        soundURL[3] = getClass().getResource("/sound/pickupItem.wav");
+        soundURL[3] = getClass().getResource("/sound/pickUpItem.wav");
         soundURL[4] = getClass().getResource("/sound/buyHouse.wav");
     }
 

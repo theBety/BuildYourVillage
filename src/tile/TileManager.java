@@ -13,6 +13,7 @@ public class TileManager {
     GamePanel gp;
     public Tile[] tile;
     public int[][][] mapTileNum;
+    int count = 0;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
@@ -28,9 +29,10 @@ public class TileManager {
      */
     public void getTileImage() {
         try{
-            BufferedReader br = new BufferedReader(new FileReader("loadTiles.txt"));
+            InputStream is = getClass().getResourceAsStream("/files/loadTiles.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(is)));
             String line;
-            int count = 0;
+            count = 0;
             while ((line = br.readLine()) != null) {
                 if(count == 27 || count == 34 || count == 41){
                     count++;
@@ -53,6 +55,10 @@ public class TileManager {
             tile[index].collision = collision;
         } catch (IOException e) {
             throw new Error("Something's wrong in setUpImage");
+        }catch (NullPointerException e){
+            System.out.println("Null pointer in tileManager");
+            System.out.println(count);
+            System.out.println(imageName);
         }
     }
 

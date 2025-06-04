@@ -99,13 +99,14 @@ public class UITrading {
                 if (ui.villager.inventory.get(indexItem) != null) {
                     if (ui.villager.inventory.get(indexItem).price > gp.player.coins) {
                         ui.ut.goToPlayState("You don't have enough money");
-                        //ui.drawDialogueScreen();
                     } else {
                         if (gp.player.canStackItem(ui.villager.inventory.get(indexItem))) {
                             ui.g2.setFont(ui.g2.getFont().deriveFont(Font.PLAIN, 25));
                             gp.player.coins -= ui.villager.inventory.get(indexItem).price;
                         } else {
-                            ui.ut.goToPlayState("You don't have enough room in\nyour inventory");
+                            if(gp.player.inventory.size() >= gp.player.inventoryCapacity){
+                                ui.ut.goToPlayState("You don't have enough room in\nyour inventory");
+                            }
                         }
                     }
                 } else {
